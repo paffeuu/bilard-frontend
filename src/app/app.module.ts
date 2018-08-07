@@ -6,6 +6,7 @@ import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { MenuComponent } from './component/menu/menu.component';
 import { TableModule } from "./component/table/table.module";
 import { AppRoutingModule } from "./app-routing.module";
+import {ButtonModule} from "primeng/button";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { AppRoutingModule } from "./app-routing.module";
   imports: [
     BrowserModule,
     TableModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
