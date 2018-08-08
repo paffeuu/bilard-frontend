@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {DataService} from "../../shared/service/data.service";
 
 @Component({
   selector: 'app-menu',
@@ -6,11 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  division: number = 0;
+  division: number = 2;
 
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.sendDivisionToService();
   }
 
+  sendDivisionToService(): void {
+    this.dataService.division = this.division;
+  }
 }
