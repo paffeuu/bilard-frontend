@@ -7,6 +7,8 @@ import { MenuComponent } from './component/menu/menu.component';
 import { TableModule } from "./component/table/table.module";
 import { AppRoutingModule } from "./app-routing.module";
 import {ButtonModule} from "primeng/button";
+import {RadioButtonModule} from "primeng/primeng";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import {ButtonModule} from "primeng/button";
     BrowserModule,
     TableModule,
     AppRoutingModule,
-    ButtonModule
+    ButtonModule,
+    RadioButtonModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
