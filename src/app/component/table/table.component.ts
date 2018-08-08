@@ -38,7 +38,7 @@ export class TableComponent implements OnInit {
     var height = 500;
 
     for (var i = 1; i <= this.dataService.division; ++i) {
-      var parts = parseInt(this.dataService.division) + 1;
+      var parts = parseInt(String(this.dataService.division)) + 1;
       this.c.moveTo(width / parts * i, 0);
       this.c.lineTo(width / parts * i, height);
     }
