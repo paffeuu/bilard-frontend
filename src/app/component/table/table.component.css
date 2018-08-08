@@ -22,3 +22,7 @@
   margin-right: auto;
   border: 3px black solid;
 }
+
+.main-canvas {
+  border: 2px solid black;
+}
