@@ -7,7 +7,7 @@ import {DataService} from "../../shared/service/data.service";
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  division: number = 2;
+  division: number = 0;
 
   constructor(private dataService: DataService) { }
 
@@ -16,6 +16,6 @@ export class MenuComponent implements OnInit {
   }
 
   sendDivisionToService(): void {
-    this.dataService.division = this.division;
+    this.dataService.setDivision(this.division);
   }
 }
