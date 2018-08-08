@@ -13,6 +13,9 @@ export class TableComponent implements OnInit {
   canvas: any;
 
   constructor(private dataService: DataService) {
+    setInterval(() => {
+      this.refreshComponent();
+    }, 500);
   }
 
   ngOnInit() {
@@ -20,7 +23,6 @@ export class TableComponent implements OnInit {
       .getDivision()
       .subscribe(response => {
         this.divisionLines = parseInt(response.division);
-        this.drawDivisionLines(this.divisionLines);
       }, error => {
         console.error(error);
       });
@@ -33,7 +35,7 @@ export class TableComponent implements OnInit {
     this.canvas = (<HTMLCanvasElement>this.poolTableView.nativeElement);
     this.c = this.canvas.getContext('2d');
     this.image = new Image();
-    this.image.src = 'https://preview.ibb.co/mAZX1K/table_cut01.jpg';
+    this.image.src = 'http://localhost:8090/pooltable/get-snapshot';
 
     let that = this;
     this.image.onload = function () {
@@ -42,10 +44,6 @@ export class TableComponent implements OnInit {
   }
 
   drawDivisionLines(lines: number): void {
-    this.c.beginPath();
-    this.c.clearRect(0, 0, 1000, 500);
-    this.drawPoolTableImage(this.image);
-
     for (let i = 1; i <= lines; ++i) {
       let parts = lines + 1;
       this.c.moveTo(this.canvas.width / parts * i, 0);
@@ -56,6 +54,15 @@ export class TableComponent implements OnInit {
   }
 
   drawPoolTableImage(image): void {
-    this.c.drawImage(image, 0, 0, 1000, 500);
+    this.c.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+    this.drawDivisionLines(this.divisionLines);
+  }
+
+  refreshComponent(): void {
+    this.image.src = 'http://localhost:8090/pooltable/get-snapshot?' + new Date().getTime();
+
+    this.c.beginPath();
+    this.c.clearRect(0, 0, 1000, 500);
+    this.drawPoolTableImage(this.image);
   }
 }
