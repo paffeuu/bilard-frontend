@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
-import { PaperScope, /*Path, Point,*/ Project } from 'paper';
+import {PaperScope, /*Path, Point,*/ Project} from 'paper';
 import {environment} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {PoolTableModel} from "../../shared/model/pool.table.model";
@@ -46,25 +46,15 @@ export class TableComponent implements OnInit {
   height = tableHeight * tableScale;
   //scope: PaperScope;
   //project: Project;
-  endPoint = `${environment.url}/get-snapshot`;
-  fps = 4; // Klatki na sekunde
-  poolTable: PoolTableModel;
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
-    // setInterval(() => {
-    //   this.refreshComponent();
-    // }, 1000 / this.fps);
+    setInterval(() => {
+      this.refreshComponent();
+    }, 1000 / environment.fps);
   }
 
   ngOnInit() {
-    this.dataService
-      .getDivision()
-      .subscribe(response => {
-        this.divisionLines = parseInt(response.division);
-      }, error => {
-        console.error(error);
-      });
-
+    this.getDivision();
     this.getPoolTableObject();
   }
 
@@ -75,7 +65,7 @@ export class TableComponent implements OnInit {
     this.canvas = (<HTMLCanvasElement>this.poolTableView.nativeElement);
     this.c = this.canvas.getContext('2d');
     this.image = new Image();
-    this.image.src = this.endPoint;
+    // this.tableImage.src = this.endPoint;
     //this.scope = new PaperScope();
     //this.project = new Project(this.poolTableView.nativeElement);
 
@@ -86,6 +76,16 @@ export class TableComponent implements OnInit {
     }
 
     //this.drawCueBalls();
+  }
+
+  getDivision(): void {
+    this.dataService
+      .getDivision()
+      .subscribe(response => {
+        this.divisionLines = parseInt(response.division);
+      }, error => {
+        console.error(error);
+      });
   }
 
   drawDivisionLines(): void {
@@ -105,7 +105,7 @@ export class TableComponent implements OnInit {
   }
 
   refreshComponent(): void {
-    this.image.src = this.endPoint + '?' + new Date().getTime();
+    this.getPoolTableObject();
   }
 
   /*drawCueBalls(): void
@@ -130,8 +130,7 @@ export class TableComponent implements OnInit {
     this.poolTableService
       .getPoolTableObject()
       .subscribe(response => {
-        this.poolTable = response;
-        console.log(this.poolTable.balls)
+        this.image.src = "data:image/jpg;base64," + response.tableImage;
       }, error => {
         console.error(error);
       });

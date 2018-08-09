@@ -1,10 +1,10 @@
 export class PoolTableModel {
-  image: any;
+  tableImage: any;
   balls: any;
   cue: any;
 
   constructor() {
-    this.image = null;
+    this.tableImage = null;
     this.balls = null;
     this.cue = null;
   }

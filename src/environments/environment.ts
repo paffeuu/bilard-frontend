@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url: "http://localhost:8090/pooltable"
+  url: "http://localhost:8090/pooltable",
+  fps: 4
 };
 
 /*
