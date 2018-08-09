@@ -1,13 +1,14 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
-import { PaperScope, Path, Point, Project } from 'paper';
+import { PaperScope, /*Path, Point,*/ Project } from 'paper';
+import {environment} from "../../../environments/environment";
 
 const tableWidth = 2048;  // rozdzielczość zdjęcia to 2048 x 1536
 const tableHeight = 1536;
 const tableScale = 0.5;   // skala -> image/source-image
-const radius = 10;
-const cueBallsDataModel = [
+//const radius = 10;
+/*const cueBallsDataModel = [
   {i: 0, x: 1122.5, y: 1085.5},
   {i: 1, x: 1088.5, y: 713.5},
   {i: 2, x: 880.5, y: 503.5},
@@ -27,7 +28,7 @@ const cueBallsDataModel = [
   {i: 16, x: 1754.5, y: 857.5},
   {i: 17, x: 144.5, y: 112.5},
   {i: 18, x: 259.5, y: 107.5}
-];  // przykładowy model danych
+];*/  // przykładowy model danych
 
 @Component({
   selector: 'app-table',
@@ -41,9 +42,9 @@ export class TableComponent implements OnInit {
   cueBalls: object[];   // tu trzeba przypisać do tablicy jsona z GETa z backendu
   width = tableWidth * tableScale;
   height = tableHeight * tableScale;
-  scope: PaperScope;
-  project: Project;
-  endPoint = 'http://localhost:8090/pooltable/get-snapshot';
+  //scope: PaperScope;
+  //project: Project;
+  endPoint = `${environment.url}/get-snapshot`;
   fps = 4; // Klatki na sekunde
 
   constructor(private dataService: DataService) {
@@ -70,8 +71,8 @@ export class TableComponent implements OnInit {
     this.c = this.canvas.getContext('2d');
     this.image = new Image();
     this.image.src = this.endPoint;
-    this.scope = new PaperScope();
-    this.project = new Project(this.poolTableView.nativeElement);
+    //this.scope = new PaperScope();
+    //this.project = new Project(this.poolTableView.nativeElement);
 
     let that = this;
     this.image.onload = function () {
@@ -79,25 +80,7 @@ export class TableComponent implements OnInit {
       that.drawDivisionLines();
     }
 
-    this.drawCueBalls();
-  }
-
-  drawCueBalls(): void
-  {
-    // TO-DO kulki się rozjeżdżają dokładnie jak 'beczkowaty' obraz z kamery
-    cueBallsDataModel.forEach((ball) => {
-      let x = ball.x * tableScale;
-      let y = ball.y * tableScale;
-      let center = new Point(x, y);
-      let circle = new Path.Circle(center, radius);
-      circle.strokeColor = "black";
-      circle.fillColor = "black"
-      circle.onMouseMove = function(event) {    // tu będzie podświetlanie całych lub połówek
-        circle.strokeColor = "red";
-        console.log(event.timeStamp);
-        console.log(circle.id);
-      }
-    })
+    //this.drawCueBalls();
   }
 
   drawDivisionLines(): void {
@@ -119,4 +102,22 @@ export class TableComponent implements OnInit {
   refreshComponent(): void {
     this.image.src = this.endPoint + '?' + new Date().getTime();
   }
+
+  /*drawCueBalls(): void
+  {
+    // TO-DO kulki się rozjeżdżają dokładnie jak 'beczkowaty' obraz z kamery
+    cueBallsDataModel.forEach((ball) => {
+      let x = ball.x * tableScale;
+      let y = ball.y * tableScale;
+      let center = new Point(x, y);
+      let circle = new Path.Circle(center, radius);
+      circle.strokeColor = "black";
+      circle.fillColor = "black"
+      circle.onMouseMove = function(event) {    // tu będzie podświetlanie całych lub połówek
+        circle.strokeColor = "red";
+        console.log(event.timeStamp);
+        console.log(circle.id);
+      }
+    })
+  }*/
 }
