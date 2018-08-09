@@ -46,6 +46,7 @@ export class TableComponent implements OnInit {
   height = tableHeight * tableScale;
   //scope: PaperScope;
   //project: Project;
+  tableObject: any;
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
@@ -130,7 +131,8 @@ export class TableComponent implements OnInit {
     this.poolTableService
       .getPoolTableObject()
       .subscribe(response => {
-        this.image.src = "data:image/jpg;base64," + response.tableImage;
+        this.tableObject = response;
+        this.image.src = "data:image/jpg;base64," + this.tableObject.tableImage;
       }, error => {
         console.error(error);
       });
