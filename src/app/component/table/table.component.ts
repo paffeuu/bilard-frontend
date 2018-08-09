@@ -3,6 +3,8 @@ import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import { PaperScope, /*Path, Point,*/ Project } from 'paper';
 import {environment} from "../../../environments/environment";
+import {PoolTableService} from "../../shared/service/pool.table.service";
+import {PoolTableModel} from "../../shared/model/pool.table.model";
 
 const tableWidth = 2048;  // rozdzielczość zdjęcia to 2048 x 1536
 const tableHeight = 1536;
@@ -46,11 +48,12 @@ export class TableComponent implements OnInit {
   //project: Project;
   endPoint = `${environment.url}/get-snapshot`;
   fps = 4; // Klatki na sekunde
+  poolTable: PoolTableModel;
 
-  constructor(private dataService: DataService) {
-    setInterval(() => {
-      this.refreshComponent();
-    }, 1000 / this.fps);
+  constructor(private dataService: DataService, private poolTableService: PoolTableService) {
+    // setInterval(() => {
+    //   this.refreshComponent();
+    // }, 1000 / this.fps);
   }
 
   ngOnInit() {
@@ -61,6 +64,8 @@ export class TableComponent implements OnInit {
       }, error => {
         console.error(error);
       });
+
+    this.getPoolTableObject();
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
@@ -120,4 +125,15 @@ export class TableComponent implements OnInit {
       }
     })
   }*/
+
+  getPoolTableObject(): void {
+    this.poolTableService
+      .getPoolTableObject()
+      .subscribe(response => {
+        this.poolTable = response;
+        console.log(this.poolTable.balls)
+      }, error => {
+        console.error(error);
+      });
+  }
 }
