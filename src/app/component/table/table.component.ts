@@ -42,8 +42,8 @@ export class TableComponent implements OnInit {
   cueBalls: object[];   // tu trzeba przypisać do tablicy jsona z GETa z backendu
   width = tableWidth * tableScale;
   height = tableHeight * tableScale;
-  scope: PaperScope;
-  project: Project;
+  //scope: PaperScope;
+  //project: Project;
   endPoint = `${environment.url}/get-snapshot`;
   fps = 4; // Klatki na sekunde
 
@@ -71,8 +71,8 @@ export class TableComponent implements OnInit {
     this.c = this.canvas.getContext('2d');
     this.image = new Image();
     this.image.src = this.endPoint;
-    this.scope = new PaperScope();
-    this.project = new Project(this.poolTableView.nativeElement);
+    //this.scope = new PaperScope();
+    //this.project = new Project(this.poolTableView.nativeElement);
 
     let that = this;
     this.image.onload = function () {
