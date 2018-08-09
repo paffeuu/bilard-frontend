@@ -3,7 +3,6 @@ import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import { PaperScope, Path, Point, Project } from 'paper';
 
-const imageSrc = "https://preview.ibb.co/hSXgy9/bilard2.jpg";   // źródło obrazu
 const tableWidth = 2048;  // rozdzielczość zdjęcia to 2048 x 1536
 const tableHeight = 1536;
 const tableScale = 0.5;   // skala -> image/source-image
@@ -35,7 +34,6 @@ const cueBallsDataModel = [
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-
 export class TableComponent implements OnInit {
   image: any;
   divisionLines: number;
@@ -45,8 +43,13 @@ export class TableComponent implements OnInit {
   height = tableHeight * tableScale;
   scope: PaperScope;
   project: Project;
+  endPoint = 'http://localhost:8090/pooltable/get-snapshot';
+  fps = 4; // Klatki na sekunde
 
   constructor(private dataService: DataService) {
+    setInterval(() => {
+      this.refreshComponent();
+    }, 1000 / this.fps);
   }
 
   ngOnInit() {
@@ -54,7 +57,6 @@ export class TableComponent implements OnInit {
       .getDivision()
       .subscribe(response => {
         this.divisionLines = parseInt(response.division);
-        this.drawDivisionLines(this.divisionLines);
       }, error => {
         console.error(error);
       });
@@ -67,15 +69,16 @@ export class TableComponent implements OnInit {
     this.canvas = (<HTMLCanvasElement>this.poolTableView.nativeElement);
     this.c = this.canvas.getContext('2d');
     this.image = new Image();
-    this.image.src = imageSrc;
-
+    this.image.src = this.endPoint;
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
 
     let that = this;
     this.image.onload = function () {
       that.drawPoolTableImage(that.image);
+      that.drawDivisionLines();
     }
+
     this.drawCueBalls();
   }
 
@@ -97,21 +100,23 @@ export class TableComponent implements OnInit {
     })
   }
 
-  drawDivisionLines(lines: number): void {
+  drawDivisionLines(): void {
     this.c.beginPath();
-    this.c.clearRect(0, 0, this.width, this.height);
-    this.drawPoolTableImage(this.image);
 
-    for (let i = 1; i <= lines; ++i) {
-      let parts = lines + 1;
+    for (let i = 1; i <= this.divisionLines; ++i) {
+      let parts = this.divisionLines + 1;
       this.c.moveTo(this.canvas.width / parts * i, 0);
       this.c.lineTo(this.canvas.width / parts * i, this.canvas.height);
     }
+
     this.c.stroke();
   }
 
+  drawPoolTableImage(image: any): void {
+    this.c.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+  }
 
-  drawPoolTableImage(image): void {
-    this.c.drawImage(image, 0, 0, this.width, this.height);
+  refreshComponent(): void {
+    this.image.src = this.endPoint + '?' + new Date().getTime();
   }
 }
