@@ -9,6 +9,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import {ButtonModule} from "primeng/button";
 import {RadioButtonModule} from "primeng/primeng";
 import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {FormsModule} from "@angular/forms";
     AppRoutingModule,
     ButtonModule,
     RadioButtonModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
