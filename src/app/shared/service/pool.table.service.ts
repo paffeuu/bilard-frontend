@@ -13,7 +13,7 @@ export class PoolTableService {
 
   getPoolTableObject(): Observable<PoolTableModel> {
     return this.http.get<PoolTableModel>(
-      `${environment.url}/get-snapshot`
+      `${environment.url}/get-pool-table`
     );
   }
 }
