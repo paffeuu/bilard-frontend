@@ -77,7 +77,6 @@ export class TableComponent implements OnInit {
 
     this.initalizeCanvas();
 
-    //this.drawPoolTableImage();
     this.drawDivisionLines();
     this.drawCueBalls();
   }
@@ -87,12 +86,9 @@ export class TableComponent implements OnInit {
     let raster = new Raster({
       image: this.image,
       name: "raster",
-      resolution: new Size(this.width, this.height),
       position: new Point(this.width /2, this.height /2)
     });
-    console.log(raster);
-
-    //this.context.globalCompositeOperation = "source-in";
+    raster.scale(0.5, 0.5);
 
     let lines = new Group();
     lines.name = "lines";
@@ -125,23 +121,8 @@ export class TableComponent implements OnInit {
     }
   }
 
-  drawPoolTableImage(): void {
-    let raster = this.project.activeLayer.children["raster"];
-    raster.remove();
-    raster = new Raster({
-      image: this.image,
-      name: "raster",
-      size: paper.view.viewSize,
-      width: this.width,
-      height: this.height,
-      position: new Point(this.width /2, this.height /2)
-    });
-  }
-
   refreshComponent(): void {
     this.getPoolTableObject();
-    //this.drawPoolTableImage();
-    //this.context.drawImage(this.image, 0, 0, this.width, this.height);
     this.getDivision();
     this.drawDivisionLines();
   }
