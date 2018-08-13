@@ -1,16 +1,15 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
-import {PaperScope, /*Path, Point,*/ Project} from 'paper';
+import {PaperScope, Path, Point, Project, Raster, Group, Item, View, Size} from 'paper';
 import {environment} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
-import {PoolTableModel} from "../../shared/model/pool.table.model";
 
 const tableWidth = 2048;  // rozdzielczość zdjęcia to 2048 x 1536
 const tableHeight = 1536;
 const tableScale = 0.5;   // skala -> image/source-image
-//const radius = 10;
-/*const cueBallsDataModel = [
+const radius = 10;
+const cueBallsDataModel = [
   {i: 0, x: 1122.5, y: 1085.5},
   {i: 1, x: 1088.5, y: 713.5},
   {i: 2, x: 880.5, y: 503.5},
@@ -30,7 +29,7 @@ const tableScale = 0.5;   // skala -> image/source-image
   {i: 16, x: 1754.5, y: 857.5},
   {i: 17, x: 144.5, y: 112.5},
   {i: 18, x: 259.5, y: 107.5}
-];*/  // przykładowy model danych
+];  // przykładowy model danych
 
 @Component({
   selector: 'app-table',
@@ -40,13 +39,18 @@ const tableScale = 0.5;   // skala -> image/source-image
 export class TableComponent implements OnInit {
   image: any;
   divisionLines: number;
-  canvas: any;
-  cueBalls: object[];   // tu trzeba przypisać do tablicy jsona z GETa z backendu
+  //cueBalls: object[];   // tu trzeba przypisać do tablicy jsona z GETa z backendu
   width = tableWidth * tableScale;
   height = tableHeight * tableScale;
-  //scope: PaperScope;
-  //project: Project;
+  scope: PaperScope;
+  project: Project;
+  view: View;
   tableObject: any;
+
+  canvas: any;
+  context: CanvasRenderingContext2D;
+
+
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
@@ -57,26 +61,47 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     this.getDivision();
     this.getPoolTableObject();
+
+    this.canvas = (<HTMLCanvasElement>this.poolTableView.nativeElement);
+    this.context = this.canvas.getContext('2d');
+
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
-  public c: CanvasRenderingContext2D;
 
   ngAfterViewInit(): void {
-    this.canvas = (<HTMLCanvasElement>this.poolTableView.nativeElement);
-    this.c = this.canvas.getContext('2d');
     this.image = new Image();
-    // this.tableImage.src = this.endPoint;
-    //this.scope = new PaperScope();
-    //this.project = new Project(this.poolTableView.nativeElement);
+    this.scope = new PaperScope();
+    this.project = new Project(this.poolTableView.nativeElement)
 
-    let that = this;
-    this.image.onload = function () {
-      that.drawPoolTableImage(that.image);
-      that.drawDivisionLines();
-    }
 
-    //this.drawCueBalls();
+    this.initalizeCanvas();
+
+    //this.drawPoolTableImage();
+    this.drawDivisionLines();
+    this.drawCueBalls();
+  }
+
+  initalizeCanvas(): void {
+
+    let raster = new Raster({
+      image: this.image,
+      name: "raster",
+      resolution: new Size(this.width, this.height),
+      position: new Point(this.width /2, this.height /2)
+    });
+    console.log(raster);
+
+    //this.context.globalCompositeOperation = "source-in";
+
+    let lines = new Group();
+    lines.name = "lines";
+
+    let solids = new Group();     // bile "całe"
+    solids.name = "solids";
+
+    let stripes = new Group();    // bile "połówki"
+    stripes.name = "stripes";
   }
 
   getDivision(): void {
@@ -90,42 +115,67 @@ export class TableComponent implements OnInit {
   }
 
   drawDivisionLines(): void {
-    this.c.beginPath();
-
+    let lines = this.project.activeLayer.children["lines"];
+    lines.removeChildren();
     for (let i = 1; i <= this.divisionLines; ++i) {
-      let parts = this.divisionLines + 1;
-      this.c.moveTo(this.canvas.width / parts * i, 0);
-      this.c.lineTo(this.canvas.width / parts * i, this.canvas.height);
+      let line = new Path.Line(new Point(this.width / (this.divisionLines + 1) * i, 0),
+        new Point(this.width / (this.divisionLines + 1) * i, this.height));
+      line.strokeColor = "black";
+      lines.addChild(line);
     }
-
-    this.c.stroke();
   }
 
-  drawPoolTableImage(image: any): void {
-    this.c.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+  drawPoolTableImage(): void {
+    let raster = this.project.activeLayer.children["raster"];
+    raster.remove();
+    raster = new Raster({
+      image: this.image,
+      name: "raster",
+      size: paper.view.viewSize,
+      width: this.width,
+      height: this.height,
+      position: new Point(this.width /2, this.height /2)
+    });
   }
 
   refreshComponent(): void {
     this.getPoolTableObject();
+    //this.drawPoolTableImage();
+    //this.context.drawImage(this.image, 0, 0, this.width, this.height);
+    this.getDivision();
+    this.drawDivisionLines();
   }
 
-  /*drawCueBalls(): void
-  {
-    // TO-DO kulki się rozjeżdżają dokładnie jak 'beczkowaty' obraz z kamery
+  drawCueBalls(): void {
+    // TO-DO kulki się rozjeżdżają dokładnie jak 'beczkowaty' obraz z kamery - problem z image distortion
+    let solids = this.project.activeLayer.children["solids"];     // bile "całe"
+    solids.removeChildren();
+    let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
+    stripes.removeChildren();
+    let that = this;
     cueBallsDataModel.forEach((ball) => {
-      let x = ball.x * tableScale;
-      let y = ball.y * tableScale;
-      let center = new Point(x, y);
-      let circle = new Path.Circle(center, radius);
-      circle.strokeColor = "black";
-      circle.fillColor = "black"
-      circle.onMouseMove = function(event) {    // tu będzie podświetlanie całych lub połówek
-        circle.strokeColor = "red";
-        console.log(event.timeStamp);
-        console.log(circle.id);
+      let circle = new Path.Circle(new Point(ball.x * tableScale, ball.y * tableScale), radius);
+      if (ball.i % 2 == 0) { // tu warunek dla całych i połówek <-- random
+        solids.addChild(circle);
+        circle.onMouseMove = function() {    // tu będzie podświetlanie całych lub połówek
+          let solids = this.project.activeLayer.children["solids"];
+          solids.children.forEach((circle) => that.setCircleHighlighted(circle, "red"));
+        };
+        circle.onMouseLeave = function () {
+          solids.children.forEach((circle) => that.setCircleUnhighlighted(circle));
+        }
+      } else {
+        stripes.addChild(circle);
+        circle.onMouseMove = function () {    // tu będzie podświetlanie całych lub połówek
+          stripes.children.forEach((circle) => that.setCircleHighlighted(circle, "white"));
+        }
+        circle.onMouseLeave = function () {
+          stripes.children.forEach((circle) => that.setCircleUnhighlighted(circle));
+        }
       }
+      this.setCircleUnhighlighted(circle);
     })
-  }*/
+  }
 
   getPoolTableObject(): void {
     this.poolTableService
@@ -137,4 +187,15 @@ export class TableComponent implements OnInit {
         console.error(error);
       });
   }
+
+  setCircleHighlighted(circle: Item, color: string) {
+    circle.fillColor = color;
+    circle.opacity = 0.7;
+  }
+
+  setCircleUnhighlighted(circle: Item) {
+    circle.fillColor = "black";
+    circle.opacity = 1;     // im bliżej 0, tym bardziej nie widać bil
+  }
+
 }
