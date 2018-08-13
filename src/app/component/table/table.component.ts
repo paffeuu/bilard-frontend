@@ -4,6 +4,8 @@ import {DataService} from "../../shared/service/data.service";
 import {PaperScope, Path, Point, Project, Raster, Group, Item, View, Size} from 'paper';
 import {environment} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
+import {PoolTableModel} from "../../shared/model/pool.table.model";
+import {BallModel} from "../../shared/model/ball.model";
 
 const tableWidth = 2048;  // rozdzielczość zdjęcia to 2048 x 1536
 const tableHeight = 1536;
@@ -39,16 +41,12 @@ const cueBallsDataModel = [
 export class TableComponent implements OnInit {
   image: any;
   divisionLines: number;
-  //cueBalls: object[];   // tu trzeba przypisać do tablicy jsona z GETa z backendu
   width = tableWidth * tableScale;
   height = tableHeight * tableScale;
   scope: PaperScope;
   project: Project;
-  view: View;
-  tableObject: any;
-
-  canvas: any;
-  context: CanvasRenderingContext2D;
+  tableObject: PoolTableModel;
+  cueBalls: BallModel[];
 
 
 
@@ -61,10 +59,6 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     this.getDivision();
     this.getPoolTableObject();
-
-    this.canvas = (<HTMLCanvasElement>this.poolTableView.nativeElement);
-    this.context = this.canvas.getContext('2d');
-
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
@@ -73,7 +67,6 @@ export class TableComponent implements OnInit {
     this.image = new Image();
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement)
-
 
     this.initalizeCanvas();
 
@@ -88,7 +81,7 @@ export class TableComponent implements OnInit {
       name: "raster",
       position: new Point(this.width /2, this.height /2)
     });
-    raster.scale(0.5, 0.5);
+    raster.scale(tableScale, tableScale);
 
     let lines = new Group();
     lines.name = "lines";
@@ -123,6 +116,7 @@ export class TableComponent implements OnInit {
 
   refreshComponent(): void {
     this.getPoolTableObject();
+    this.drawCueBalls();
     this.getDivision();
     this.drawDivisionLines();
   }
@@ -134,9 +128,10 @@ export class TableComponent implements OnInit {
     let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
     stripes.removeChildren();
     let that = this;
-    cueBallsDataModel.forEach((ball) => {
+    console.log(this.cueBalls);
+    this.cueBalls.forEach((ball) => {
       let circle = new Path.Circle(new Point(ball.x * tableScale, ball.y * tableScale), radius);
-      if (ball.i % 2 == 0) { // tu warunek dla całych i połówek <-- random
+      if (ball.id % 2 == 0) { // tu warunek dla całych i połówek <-- random
         solids.addChild(circle);
         circle.onMouseMove = function() {    // tu będzie podświetlanie całych lub połówek
           let solids = this.project.activeLayer.children["solids"];
@@ -164,6 +159,7 @@ export class TableComponent implements OnInit {
       .subscribe(response => {
         this.tableObject = response;
         this.image.src = "data:image/jpg;base64," + this.tableObject.tableImage;
+        this.cueBalls = response.balls;
       }, error => {
         console.error(error);
       });
