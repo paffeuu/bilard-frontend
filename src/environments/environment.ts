@@ -8,6 +8,18 @@ export const environment = {
   fps: 4
 };
 
+export const tableImage = {
+  width: 2048,  // rozdzielczość zdjęcia z kamery
+  height: 1536,
+  scale: 0.5   // skala -> image/source-image
+}
+
+export const balls = {
+  radius: 10,
+  solidsColor: "red",
+  stripesColor: "white"
+}
+
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can

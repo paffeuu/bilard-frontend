@@ -2,15 +2,10 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import {PaperScope, Path, Point, Project, Raster, Group, Item} from 'paper';
-import {environment} from "../../../environments/environment";
+import {balls, environment, tableImage} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {PoolTableModel} from "../../shared/model/pool.table.model";
 import {BallModel} from "../../shared/model/ball.model";
-
-const tableWidth = 2048;  // rozdzielczość zdjęcia to 2048 x 1536
-const tableHeight = 1536;
-const tableScale = 0.5;   // skala -> image/source-image
-const radius = 10;
 
 @Component({
   selector: 'app-table',
@@ -18,16 +13,16 @@ const radius = 10;
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
+  width = tableImage.width * tableImage.scale;
+  height = tableImage.height * tableImage.scale;
   image: any;
   divisionLines: number;
-  width = tableWidth * tableScale;
-  height = tableHeight * tableScale;
-  scope: PaperScope;
-  project: Project;
+
   tableObject: PoolTableModel;
   cueBalls: BallModel[];
 
-
+  scope: PaperScope;
+  project: Project;
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
@@ -58,7 +53,7 @@ export class TableComponent implements OnInit {
       name: "raster",
       position: new Point(this.width /2, this.height /2)
     });
-    raster.scale(tableScale, tableScale);
+    raster.scale(tableImage.scale, tableImage.scale);
 
     let lines = new Group();
     lines.name = "lines";
@@ -104,14 +99,15 @@ export class TableComponent implements OnInit {
     let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
     stripes.removeChildren();
     let that = this;
-    console.log(this.cueBalls);
     this.cueBalls.forEach((ball) => {
-      let circle = new Path.Circle(new Point(ball.x * tableScale, ball.y * tableScale), radius);
+      let circle = new Path.Circle(
+        new Point(ball.x * tableImage.scale, ball.y * tableImage.scale),
+        balls.radius);
       if (ball.id % 2 == 0) { // tu warunek dla całych i połówek <-- random
         solids.addChild(circle);
         circle.onMouseMove = function() {    // tu będzie podświetlanie całych
           let solids = this.project.activeLayer.children["solids"];
-          solids.children.forEach((circle) => that.setCircleHighlighted(circle, "red"));
+          solids.children.forEach((circle) => that.setCircleHighlighted(circle, balls.solidsColor));
         };
         circle.onMouseLeave = function () {
           solids.children.forEach((circle) => that.setCircleUnhighlighted(circle));
@@ -119,7 +115,7 @@ export class TableComponent implements OnInit {
       } else {
         stripes.addChild(circle);
         circle.onMouseMove = function () {    // tu będzie podświetlanie połówek
-          stripes.children.forEach((circle) => that.setCircleHighlighted(circle, "white"));
+          stripes.children.forEach((circle) => that.setCircleHighlighted(circle, balls.stripesColor));
         }
         circle.onMouseLeave = function () {
           stripes.children.forEach((circle) => that.setCircleUnhighlighted(circle));
