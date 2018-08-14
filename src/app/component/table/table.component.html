@@ -1,4 +1,5 @@
 <div class="image-container">
   <canvas #poolTableView class="main-canvas" width="{{width}}" height="{{height}}"></canvas>
-  <app-cueballs></app-cueballs>
+  <app-cueballs [project]="project" [cueBalls]="cueBalls"></app-cueballs>
+  <app-divisionlines [project]="project" [divisionLines]="divisionLines"></app-divisionlines>
 </div>

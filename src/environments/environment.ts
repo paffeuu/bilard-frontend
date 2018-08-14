@@ -8,16 +8,20 @@ export const environment = {
   fps: 4
 };
 
-export const tableImage = {
+export const tableConfig = {
   width: 2048,  // rozdzielczość zdjęcia z kamery
   height: 1536,
   scale: 0.5   // skala -> image/source-image
 }
 
-export const balls = {
+export const ballsConfig = {
   radius: 10,
   solidsColor: "red",
   stripesColor: "white"
+}
+
+export const linesConfig = {
+  lineColor: "black"
 }
 
 /*

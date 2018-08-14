@@ -1,8 +1,8 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
-import {PaperScope, Path, Point, Project, Raster, Group, Item} from 'paper';
-import {balls, environment, tableImage} from "../../../environments/environment";
+import {PaperScope, Point, Project, Raster, Group} from 'paper';
+import {environment, tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {PoolTableModel} from "../../shared/model/pool.table.model";
 import {BallModel} from "../../shared/model/ball.model";
@@ -13,8 +13,8 @@ import {BallModel} from "../../shared/model/ball.model";
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-  width = tableImage.width * tableImage.scale;
-  height = tableImage.height * tableImage.scale;
+  width = tableConfig.width * tableConfig.scale;
+  height = tableConfig.height * tableConfig.scale;
   image: any;
   divisionLines: number;
 
@@ -40,29 +40,28 @@ export class TableComponent implements OnInit {
   ngAfterViewInit(): void {
     this.image = new Image();
     this.scope = new PaperScope();
-    this.project = new Project(this.poolTableView.nativeElement)
+    this.project = new Project(this.poolTableView.nativeElement);
 
     this.initalizeCanvas();
     this.refreshComponent();
   }
 
   initalizeCanvas(): void {
-
     let raster = new Raster({
       image: this.image,
       name: "raster",
       position: new Point(this.width /2, this.height /2)
     });
-    raster.scale(tableImage.scale, tableImage.scale);
-
-    let lines = new Group();
-    lines.name = "lines";
+    raster.scale(tableConfig.scale, tableConfig.scale);
 
     let solids = new Group();     // bile "całe"
     solids.name = "solids";
 
     let stripes = new Group();    // bile "połówki"
     stripes.name = "stripes";
+
+    let lines = new Group();
+    lines.name = "lines";
   }
 
   getDivision(): void {
@@ -75,54 +74,10 @@ export class TableComponent implements OnInit {
       });
   }
 
-  drawDivisionLines(): void {
-    let lines = this.project.activeLayer.children["lines"];
-    lines.removeChildren();
-    for (let i = 1; i <= this.divisionLines; ++i) {
-      let line = new Path.Line(new Point(this.width / (this.divisionLines + 1) * i, 0),
-        new Point(this.width / (this.divisionLines + 1) * i, this.height));
-      line.strokeColor = "black";
-      lines.addChild(line);
-    }
-  }
 
   refreshComponent(): void {
     this.getPoolTableObject();
-    this.drawCueBalls();
     this.getDivision();
-    this.drawDivisionLines();
-  }
-
-  drawCueBalls(): void {
-    let solids = this.project.activeLayer.children["solids"];     // bile "całe"
-    solids.removeChildren();
-    let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
-    stripes.removeChildren();
-    let that = this;
-    this.cueBalls.forEach((ball) => {
-      let circle = new Path.Circle(
-        new Point(ball.x * tableImage.scale, ball.y * tableImage.scale),
-        balls.radius);
-      if (ball.id % 2 == 0) { // tu warunek dla całych i połówek <-- random
-        solids.addChild(circle);
-        circle.onMouseMove = function() {    // tu będzie podświetlanie całych
-          let solids = this.project.activeLayer.children["solids"];
-          solids.children.forEach((circle) => that.setCircleHighlighted(circle, balls.solidsColor));
-        };
-        circle.onMouseLeave = function () {
-          solids.children.forEach((circle) => that.setCircleUnhighlighted(circle));
-        }
-      } else {
-        stripes.addChild(circle);
-        circle.onMouseMove = function () {    // tu będzie podświetlanie połówek
-          stripes.children.forEach((circle) => that.setCircleHighlighted(circle, balls.stripesColor));
-        }
-        circle.onMouseLeave = function () {
-          stripes.children.forEach((circle) => that.setCircleUnhighlighted(circle));
-        }
-      }
-      this.setCircleUnhighlighted(circle);
-    })
   }
 
   getPoolTableObject(): void {
@@ -137,14 +92,5 @@ export class TableComponent implements OnInit {
       });
   }
 
-  setCircleHighlighted(circle: Item, color: string) {
-    circle.fillColor = color;
-    circle.opacity = 0.7;
-  }
-
-  setCircleUnhighlighted(circle: Item) {
-    circle.fillColor = "black";
-    circle.opacity = 0.1;     // im bliżej 0, tym bardziej nie widać bil
-  }
 
 }
