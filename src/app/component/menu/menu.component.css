@@ -1,4 +1,10 @@
+:host {
+  font-family: Bahnschrift;
+  word-spacing: 0.1em;
+}
+
 .menu-component {
+  font-family: Bahnschrift;
   border: 1px dotted gray;
   background-color: lightblue;
   padding: 20px;
