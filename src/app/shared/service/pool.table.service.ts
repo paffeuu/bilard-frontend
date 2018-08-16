@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
 import {PoolTableModel} from "../model/pool.table.model";
 import {environment} from "../../../environments/environment";
 
@@ -8,12 +7,25 @@ import {environment} from "../../../environments/environment";
   providedIn: 'root'
 })
 export class PoolTableService {
+  private lastPoolTable: PoolTableModel;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  getPoolTableObject(): Observable<PoolTableModel> {
-    return this.http.get<PoolTableModel>(
+  getPoolTableObject(): PoolTableModel {
+    let that = this;
+    this.http.get<PoolTableModel>(
       `${environment.url}/get-pool-table`
-    );
+    ).subscribe(response => {
+      that.lastPoolTable = new PoolTableModel();
+      this.lastPoolTable.balls = response.balls;
+      this.lastPoolTable.tableImage = response.tableImage;
+      this.lastPoolTable.cue = response.cue;
+    });
+    return this.lastPoolTable;
+  }
+
+  getLastFrame(): PoolTableModel {
+    return this.lastPoolTable;
   }
 }

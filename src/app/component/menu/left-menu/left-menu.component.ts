@@ -8,6 +8,7 @@ import {DataService} from "../../../shared/service/data.service";
 })
 export class LeftMenuComponent implements OnInit {
   division: number = 0;
+  showPrevPos: boolean = false;
 
   constructor(private dataService: DataService) { }
 

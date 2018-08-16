@@ -4,8 +4,8 @@ import {DataService} from "../../shared/service/data.service";
 import {PaperScope, Point, Project, Raster, Group} from 'paper';
 import {environment, tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
-import {PoolTableModel} from "../../shared/model/pool.table.model";
 import {BallModel} from "../../shared/model/ball.model";
+import {PoolTableModel} from "../../shared/model/pool.table.model";
 
 @Component({
   selector: 'app-table',
@@ -19,7 +19,6 @@ export class TableComponent implements OnInit {
   divisionLines: number = 0;
   ballsHighlight: number = 0;
 
-  tableObject: PoolTableModel;
   cueBalls: BallModel[];
 
   scope: PaperScope;
@@ -43,11 +42,6 @@ export class TableComponent implements OnInit {
   ngAfterViewInit(): void {
 
     this.image = new Image();
-    let that = this;
-    this.image.onerror = function() {
-      that.image = new Image();
-      that.project.activeLayer.children["raster"].image = that.image;
-    }
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
 
@@ -56,12 +50,7 @@ export class TableComponent implements OnInit {
   }
 
   initalizeCanvas(): void {
-    let raster = new Raster({
-      image: this.image,
-      name: "raster",
-      position: new Point(this.width /2, this.height /2)
-    });
-    raster.scale(tableConfig.scale, tableConfig.scale);
+    this.initializeRaster();
 
     let solids = new Group();     // bile "całe"
     solids.name = "solids";
@@ -73,22 +62,38 @@ export class TableComponent implements OnInit {
     lines.name = "lines";
   }
 
+  initializeRaster(): void {
+    let raster = new Raster({
+      image: this.image,
+      name: "raster",
+      position: new Point(this.width /2, this.height /2)
+    });
+    raster.scale(tableConfig.scale, tableConfig.scale);
+    let that = this;
+    raster.onError = function() {
+      let lastPoolTable = that.poolTableService.getLastFrame();
+      if (lastPoolTable != null)
+        that.image.src = "data:image/jpg;base64," + lastPoolTable.tableImage;
+      that.image = new Image();
+      raster.image = that.image;
+    }
+  }
+
   refreshComponent(): void {
     this.getPoolTableObject();
     this.getDivision();
     this.getHighlight();
   }
 
-  getPoolTableObject(): void {
-    this.poolTableService
-      .getPoolTableObject()
-      .subscribe(response => {
-        this.tableObject = response;
-        this.image.src = "data:image/jpg;base64," + this.tableObject.tableImage;
-        this.cueBalls = response.balls;
-      }, error => {
-        console.error(error);
-      });
+  getPoolTableObject(): PoolTableModel {
+    let poolTableObject = this.poolTableService.getPoolTableObject();
+    console.log(poolTableObject);
+    if (poolTableObject != null)
+    {
+      this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
+      this.cueBalls = poolTableObject.balls;
+    }
+    return poolTableObject;
   }
 
   getDivision(): void {

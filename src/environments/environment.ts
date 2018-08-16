@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   url: "http://localhost:8090/pooltable",
-  fps: 4
+  fps: 2
 };
 
 export const tableConfig = {
