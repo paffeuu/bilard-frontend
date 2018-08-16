@@ -43,6 +43,11 @@ export class TableComponent implements OnInit {
   ngAfterViewInit(): void {
 
     this.image = new Image();
+    let that = this;
+    this.image.onerror = function() {
+      that.image = new Image();
+      that.project.activeLayer.children["raster"].image = that.image;
+    }
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
 
