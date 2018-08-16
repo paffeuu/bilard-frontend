@@ -16,7 +16,8 @@ export class TableComponent implements OnInit {
   width = tableConfig.width * tableConfig.scale;
   height = tableConfig.height * tableConfig.scale;
   image: any;
-  divisionLines: number;
+  divisionLines: number = 0;
+  ballsHighlight: number = 0;
 
   tableObject: PoolTableModel;
   cueBalls: BallModel[];
@@ -27,6 +28,8 @@ export class TableComponent implements OnInit {
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
       this.refreshComponent();
+
+      console.log(this.project.activeLayer.children["raster"]);
     }, 1000 / environment.fps);
   }
 
@@ -38,6 +41,7 @@ export class TableComponent implements OnInit {
   @ViewChild('poolTableView') poolTableView: ElementRef;
 
   ngAfterViewInit(): void {
+
     this.image = new Image();
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
@@ -64,20 +68,10 @@ export class TableComponent implements OnInit {
     lines.name = "lines";
   }
 
-  getDivision(): void {
-    this.dataService
-      .getDivision()
-      .subscribe(response => {
-        this.divisionLines = parseInt(response.division);
-      }, error => {
-        console.error(error);
-      });
-  }
-
-
   refreshComponent(): void {
     this.getPoolTableObject();
     this.getDivision();
+    this.getHighlight();
   }
 
   getPoolTableObject(): void {
@@ -90,6 +84,26 @@ export class TableComponent implements OnInit {
       }, error => {
         console.error(error);
       });
+  }
+
+  getDivision(): void {
+    this.dataService
+      .getDivisionLines()
+      .subscribe(response => {
+        this.divisionLines = parseInt(response.division);
+      }, error => {
+        console.error(error);
+      });
+  }
+
+  getHighlight(): void {
+    this.dataService
+      .getCueBallsHighlight()
+      .subscribe(response => {
+        this.ballsHighlight = parseInt(response.highlight);
+      }, error => {
+      console.error(error);
+    });
   }
 
 

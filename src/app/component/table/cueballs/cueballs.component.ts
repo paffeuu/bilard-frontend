@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Group, Item, Path, Point, Project} from 'paper';
+import {Item, Path, Point, Project} from 'paper';
 import {ballsConfig, environment, tableConfig} from "../../../../environments/environment";
 import {BallModel} from "../../../shared/model/ball.model";
 
@@ -23,15 +23,16 @@ export class CueballsComponent implements OnInit {
   project: Project;
   @Input()
   cueBalls: BallModel[];
-
+  @Input()
+  ballsHighlight: number;
 
   refreshComponent() {
-    this.drawCueBalls();
+    this.drawAndHighlightCueBalls();
+    this.highlightCueBalls();
   }
 
-  drawCueBalls(): void {
+  drawAndHighlightCueBalls(): void {
     let solids = this.project.activeLayer.children["solids"];     // bile "całe"
-    console.log(this.project.activeLayer.children);
     solids.removeChildren();
     let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
     stripes.removeChildren();
@@ -59,7 +60,31 @@ export class CueballsComponent implements OnInit {
         };
       }
       CueballsComponent.setCircleUnhighlighted(circle);
+
     })
+  }
+
+  highlightCueBalls() {
+    let solids = this.project.activeLayer.children["solids"];     // bile "całe"
+    let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
+    switch (this.ballsHighlight)
+    {
+      case 0:
+        solids.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+        stripes.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+        break;
+      case 1:
+        solids.children.forEach((circle) => CueballsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
+        stripes.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+        break;
+      case 2:
+        solids.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+        stripes.children.forEach((circle) => CueballsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
+        break;
+      default:
+        console.error("Invalid value of variable 'ballsHighlight'");
+        console.log(this.ballsHighlight)
+    }
   }
 
   static setCircleHighlighted(circle: Item, color: string) {
