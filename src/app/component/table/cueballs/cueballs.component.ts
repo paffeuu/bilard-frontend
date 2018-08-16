@@ -41,7 +41,7 @@ export class CueballsComponent implements OnInit {
       let circle = new Path.Circle(
         new Point(ball.x * tableConfig.scale, ball.y * tableConfig.scale),
         ballsConfig.radius);
-      if (ball.id % 2 == 0) { // tu warunek dla całych i połówek <-- random
+      if (ball.x < tableConfig.width * tableConfig.scale) { // tu warunek dla całych i połówek <-- random
         solids.addChild(circle);
         circle.onMouseMove = function() {    // tu będzie podświetlanie całych
           let solids = that.project.activeLayer.children["solids"];
