@@ -27,11 +27,11 @@ export class CueBallsComponent implements OnInit {
   ballsHighlight: number;
 
   refreshComponent() {
-    this.drawAndHighlightCueBalls();
+    this.drawCueBalls();
     this.highlightCueBalls();
   }
 
-  drawAndHighlightCueBalls(): void {
+  drawCueBalls(): void {
     let solids = this.project.activeLayer.children["solids"];     // bile "całe"
     solids.removeChildren();
     let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
@@ -42,6 +42,7 @@ export class CueBallsComponent implements OnInit {
         new Point(ball.x * tableConfig.scale, ball.y * tableConfig.scale),
         ballsConfig.radius * tableConfig.scale);
       if (ball.x < tableConfig.width * tableConfig.scale) { // tu warunek dla całych i połówek <-- random
+      //if (ball.id >= 0 && ball.id <= 7) { // // tu warunek dla całych i połówek
         solids.addChild(circle);
         circle.onMouseMove = function() {    // tu będzie podświetlanie całych
           let solids = that.project.activeLayer.children["solids"];
@@ -50,7 +51,7 @@ export class CueBallsComponent implements OnInit {
         circle.onMouseLeave = function () {
           solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         };
-      } else {
+      } else /*if (ball.id >= 8 && ball.id <= 15)*/ {
         stripes.addChild(circle);
         circle.onMouseMove = function () {    // tu będzie podświetlanie połówek
           stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
