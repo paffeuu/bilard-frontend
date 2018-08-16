@@ -3,29 +3,24 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
-import { MenuComponent } from './component/menu/menu.component';
 import { TableModule } from "./component/table/table.module";
 import { AppRoutingModule } from "./app-routing.module";
 import {ButtonModule} from "primeng/button";
-import {RadioButtonModule, SliderModule} from "primeng/primeng";
-import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {MenuModule} from "./component/menu/menu.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    MenuComponent
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     TableModule,
     AppRoutingModule,
     ButtonModule,
-    RadioButtonModule,
-    FormsModule,
     HttpClientModule,
-    SliderModule
+    MenuModule
   ],
   providers: [],
   bootstrap: [AppComponent],

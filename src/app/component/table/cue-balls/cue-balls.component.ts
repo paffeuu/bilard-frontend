@@ -5,10 +5,10 @@ import {BallModel} from "../../../shared/model/ball.model";
 
 @Component({
   selector: 'app-cueballs',
-  templateUrl: './cueballs.component.html',
-  styleUrls: ['./cueballs.component.css']
+  templateUrl: './cue-balls.component.html',
+  styleUrls: ['./cue-balls.component.css']
 })
-export class CueballsComponent implements OnInit {
+export class CueBallsComponent implements OnInit {
 
   constructor() {
     setInterval(() => {
@@ -40,26 +40,26 @@ export class CueballsComponent implements OnInit {
     this.cueBalls.forEach((ball) => {
       let circle = new Path.Circle(
         new Point(ball.x * tableConfig.scale, ball.y * tableConfig.scale),
-        ballsConfig.radius);
+        ballsConfig.radius * tableConfig.scale);
       if (ball.x < tableConfig.width * tableConfig.scale) { // tu warunek dla całych i połówek <-- random
         solids.addChild(circle);
         circle.onMouseMove = function() {    // tu będzie podświetlanie całych
           let solids = that.project.activeLayer.children["solids"];
-          solids.children.forEach((circle) => CueballsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
+          solids.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
         };
         circle.onMouseLeave = function () {
-          solids.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+          solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         };
       } else {
         stripes.addChild(circle);
         circle.onMouseMove = function () {    // tu będzie podświetlanie połówek
-          stripes.children.forEach((circle) => CueballsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
+          stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
         };
         circle.onMouseLeave = function () {
-          stripes.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+          stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         };
       }
-      CueballsComponent.setCircleUnhighlighted(circle);
+      CueBallsComponent.setCircleUnhighlighted(circle);
 
     })
   }
@@ -70,16 +70,16 @@ export class CueballsComponent implements OnInit {
     switch (this.ballsHighlight)
     {
       case 0:
-        solids.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
-        stripes.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+        solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
+        stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         break;
       case 1:
-        solids.children.forEach((circle) => CueballsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
-        stripes.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
+        solids.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
+        stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         break;
       case 2:
-        solids.children.forEach((circle) => CueballsComponent.setCircleUnhighlighted(circle));
-        stripes.children.forEach((circle) => CueballsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
+        solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
+        stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
         break;
       default:
         console.error("Invalid value of variable 'ballsHighlight'");

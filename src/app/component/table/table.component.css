@@ -1,18 +1,10 @@
 :host {
-  width: 95%;
   display: block;
-  margin: 3%;
-}
+  margin: 0.4%;
 
-.image-container
-{
-  width: 1024px;             /* TU ZMIENIAĆ WIELKOŚĆ STOŁU*/
-  height: 768px;
-  margin-left: auto;
-  margin-right: auto;
-  max-height: 1000px;
-  border: 3px black solid;
 }
 
 .main-canvas {
+  max-width: 100%;
+  max-height: 100%;
 }

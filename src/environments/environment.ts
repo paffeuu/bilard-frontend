@@ -11,11 +11,11 @@ export const environment = {
 export const tableConfig = {
   width: 2048,  // rozdzielczość zdjęcia z kamery
   height: 1536,
-  scale: 0.5   // skala -> image/source-image
+  scale: 0.425   // skala -> image/source-image
 }
 
 export const ballsConfig = {
-  radius: 10,
+  radius: 20,
   solidsColor: "red",
   stripesColor: "white"
 }

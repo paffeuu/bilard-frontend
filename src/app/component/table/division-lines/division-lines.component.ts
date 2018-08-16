@@ -4,10 +4,10 @@ import {environment, linesConfig, tableConfig} from "../../../../environments/en
 
 @Component({
   selector: 'app-divisionlines',
-  templateUrl: './divisionlines.component.html',
-  styleUrls: ['./divisionlines.component.css']
+  templateUrl: './division-lines.component.html',
+  styleUrls: ['./division-lines.component.css']
 })
-export class DivisionlinesComponent implements OnInit {
+export class DivisionLinesComponent implements OnInit {
 
   constructor() {
     setInterval(() => {
