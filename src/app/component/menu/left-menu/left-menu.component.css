@@ -1,0 +1,27 @@
+:host {
+  font-weight: bold;
+}
+
+p-slider {
+  padding-left: 5%;
+}
+
+.button-container {
+  display: grid;
+}
+
+button {
+  font-size: 14px;
+  padding: 1%;
+  margin: 2%;
+}
+
+#delete-button {
+  background: red;
+}
+
+.inputswitch {
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+}

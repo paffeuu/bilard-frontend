@@ -5,14 +5,32 @@ import {Observable, Subject} from "rxjs";
   providedIn: 'root'
 })
 export class DataService {
-  private subject = new Subject<any>();
+  private divisionLinesSubject = new Subject<any>();
+  private cueBallsHighlightSubject = new Subject<any>();
+  private showPrevPosSubject = new Subject<any>();
 
-  setDivision(d: number) {
-    this.subject.next({ division: d });
+  setDivisionLines(d: number): void {
+    this.divisionLinesSubject.next({ division: d });
   }
 
-  getDivision(): Observable<any> {
-    return this.subject.asObservable();
+  getDivisionLines(): Observable<any> {
+    return this.divisionLinesSubject.asObservable();
+  }
+
+  setCueBallsHighlight(balls: number): void {
+    this.cueBallsHighlightSubject.next({ highlight: balls })
+  }
+
+  getCueBallsHighlight(): Observable<any> {
+    return this.cueBallsHighlightSubject.asObservable();
+  }
+
+  setShowPrevPosition(): void {
+    this.showPrevPosSubject.next({ change: true });
+  }
+
+  getShowPrevPosition(): Observable<any> {
+    return this.showPrevPosSubject.asObservable();
   }
 
   constructor() {}
