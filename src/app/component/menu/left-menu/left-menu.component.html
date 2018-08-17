@@ -21,7 +21,7 @@
         <button pButton type="button" label="Usuń zapisaną pozycję" class="ui-button-danger" id="delete-button"></button>
         <!-- ui-button-danger nie działa, nie ładuje cssów -->
         <h4 class="first">Pokaż ostatnią pozycję:</h4>
-        <p-inputSwitch [(ngModel)]="showPrevPos" class="inputswitch"></p-inputSwitch>
+        <p-inputSwitch [(ngModel)]="showPrevPos" (onChange)="sendShowPrevPositionToService()" class="inputswitch"></p-inputSwitch>
       </div>
     </div>
   </div>

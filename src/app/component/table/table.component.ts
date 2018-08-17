@@ -6,6 +6,7 @@ import {environment, tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {BallModel} from "../../shared/model/ball.model";
 import {PoolTableModel} from "../../shared/model/pool.table.model";
+import {PreviousPositionService} from "../../shared/service/previous-position.service";
 
 @Component({
   selector: 'app-table',
@@ -18,13 +19,15 @@ export class TableComponent implements OnInit {
   image: any;
   divisionLines: number = 0;
   ballsHighlight: number = 0;
+  showPrevPos: boolean = false;
 
   cueBalls: BallModel[];
 
   scope: PaperScope;
   project: Project;
 
-  constructor(private dataService: DataService, private poolTableService: PoolTableService) {
+  constructor(private dataService: DataService, private poolTableService: PoolTableService,
+              private prevPosService: PreviousPositionService) {
     setInterval(() => {
       this.refreshComponent();
 
@@ -83,6 +86,7 @@ export class TableComponent implements OnInit {
     this.getPoolTableObject();
     this.getDivision();
     this.getHighlight();
+    this.getShowPrevPosition();
   }
 
   getPoolTableObject(): PoolTableModel {
@@ -114,6 +118,19 @@ export class TableComponent implements OnInit {
       }, error => {
       console.error(error);
     });
+  }
+
+  getShowPrevPosition(): void {
+    this.dataService
+      .getShowPrevPosition().subscribe(
+        response => {
+          if (this.showPrevPos != response)
+          {
+            this.showPrevPos = response;
+            this.prevPosService.setShowPrevPosition();
+          }
+        },
+        error => console.log(error));
   }
 
 

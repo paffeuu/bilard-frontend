@@ -19,4 +19,8 @@ export class LeftMenuComponent implements OnInit {
     this.dataService.setDivisionLines(this.division);
   }
 
+  sendShowPrevPositionToService(): void {
+    this.dataService.setShowPrevPosition(this.showPrevPos);
+  }
+
 }
