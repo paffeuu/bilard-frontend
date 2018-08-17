@@ -16,8 +16,8 @@ export const tableConfig = {
 
 export const ballsConfig = {
   radius: 20,
-  solidsColor: "red",
-  stripesColor: "white"
+  solidsColor: "#ff0000",
+  stripesColor: "#00ff00"
 }
 
 export const linesConfig = {
