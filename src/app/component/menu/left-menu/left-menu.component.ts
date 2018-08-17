@@ -8,7 +8,7 @@ import {DataService} from "../../../shared/service/data.service";
 })
 export class LeftMenuComponent implements OnInit {
   division: number = 0;
-  showPrevPos: boolean = false;
+  showPrevPos: boolean = true;
 
   constructor(private dataService: DataService) { }
 
@@ -19,8 +19,8 @@ export class LeftMenuComponent implements OnInit {
     this.dataService.setDivisionLines(this.division);
   }
 
-  sendShowPrevPositionToService(): void {
-    this.dataService.setShowPrevPosition(this.showPrevPos);
+  sendChangeShowPrevPositionToService(): void {
+    this.dataService.setShowPrevPosition();
   }
 
 }
