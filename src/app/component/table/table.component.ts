@@ -90,7 +90,8 @@ export class TableComponent implements OnInit {
   }
 
   getPoolTableObject(): PoolTableModel {
-    let poolTableObject = this.poolTableService.getPoolTableObject();
+    //let poolTableObject = this.poolTableService.getPoolTableObject();
+    let poolTableObject = this.poolTableService.getPoolTableFromWebSocket();
     console.log(poolTableObject);
     if (poolTableObject != null)
     {
