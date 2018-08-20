@@ -5,8 +5,8 @@ import {PaperScope, Point, Project, Raster, Group} from 'paper';
 import {environment, tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {BallModel} from "../../shared/model/ball.model";
-import {PoolTableModel} from "../../shared/model/pool.table.model";
 import {PreviousPositionService} from "../../shared/service/previous-position.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -26,18 +26,18 @@ export class TableComponent implements OnInit {
   scope: PaperScope;
   project: Project;
 
+  poolTableObservable: Observable<any>;
+
   constructor(private dataService: DataService, private poolTableService: PoolTableService,
               private prevPosService: PreviousPositionService) {
     setInterval(() => {
       this.refreshComponent();
-
-      console.log(this.project.activeLayer.children["raster"]);
     }, 1000 / environment.fps);
   }
 
   ngOnInit() {
     this.getDivision();
-    this.getPoolTableObject();
+    this.poolTableObservable = this.poolTableService.getPoolTable();
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
@@ -48,6 +48,7 @@ export class TableComponent implements OnInit {
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
 
+    this.initializePoolTableSubject();
     this.initalizeCanvas();
     this.refreshComponent();
   }
@@ -65,39 +66,33 @@ export class TableComponent implements OnInit {
     lines.name = "lines";
   }
 
+  initializePoolTableSubject(): void {
+    let observer = {
+      next: (poolTableObject) => {
+        if (poolTableObject)
+        {
+          this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
+          this.cueBalls = poolTableObject.balls;
+        }
+      }
+    };
+    this.poolTableObservable.subscribe(observer);
+  }
+
   initializeRaster(): void {
+
     let raster = new Raster({
       image: this.image,
       name: "raster",
       position: new Point(this.width /2, this.height /2)
     });
     raster.scale(tableConfig.scale, tableConfig.scale);
-    let that = this;
-    raster.onError = function() {
-      let lastPoolTable = that.poolTableService.getLastFrame();
-      if (lastPoolTable != null)
-        that.image.src = "data:image/jpg;base64," + lastPoolTable.tableImage;
-      that.image = new Image();
-      raster.image = that.image;
-    }
   }
 
   refreshComponent(): void {
-    this.getPoolTableObject();
     this.getDivision();
     this.getHighlight();
     this.getShowPrevPosition();
-  }
-
-  getPoolTableObject(): PoolTableModel {
-    let poolTableObject = this.poolTableService.getPoolTableObject();
-    console.log(poolTableObject);
-    if (poolTableObject != null)
-    {
-      this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
-      this.cueBalls = poolTableObject.balls;
-    }
-    return poolTableObject;
   }
 
   getDivision(): void {
@@ -132,6 +127,4 @@ export class TableComponent implements OnInit {
         },
         error => console.log(error));
   }
-
-
 }

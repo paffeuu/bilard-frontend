@@ -1,31 +1,42 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {PoolTableModel} from "../model/pool.table.model";
-import {environment} from "../../../environments/environment";
+import Stomp from 'stompjs';
+import SockJS from 'sockjs-client';
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PoolTableService {
-  private lastPoolTable: PoolTableModel;
+  private serverUrl = 'http://localhost:8090/socket';
+  private stompClient;
 
-  constructor(private http: HttpClient) {
+  private readonly poolTableSubject: Subject<any>;
+
+  constructor() {
+    this.poolTableSubject = new Subject<any>();
+    this.initializeWebSocketConnection();
   }
 
-  getPoolTableObject(): PoolTableModel {
+  initializeWebSocketConnection(): void {
+    let ws = new SockJS(this.serverUrl);
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
     let that = this;
-    this.http.get<PoolTableModel>(
-      `${environment.url}/get-pool-table`
-    ).subscribe(response => {
-      that.lastPoolTable = new PoolTableModel();
-      this.lastPoolTable.balls = response.balls;
-      this.lastPoolTable.tableImage = response.tableImage;
-      this.lastPoolTable.cue = response.cue;
+    this.stompClient.connect({}, function () {      // mozliwy parametr 'frame'
+      that.stompClient.subscribe("/topic/pooltable", message => {
+        let poolTableObject = JSON.parse(message.body);
+        that.setPoolTable(poolTableObject);
+      })
     });
-    return this.lastPoolTable;
   }
 
-  getLastFrame(): PoolTableModel {
-    return this.lastPoolTable;
+  getPoolTable() {
+    return this.poolTableSubject.asObservable();
   }
+
+  setPoolTable(poolTableObject) {
+    this.poolTableSubject.next(poolTableObject);
+    console.log(this.poolTableSubject);
+  }
+
 }
