@@ -14,22 +14,20 @@ export class PoolTableService {
   private stompClient;
 
   constructor(private http: HttpClient) {
-    this.getPoolTableFromWebSocket();
+    this.initializeWebSocketConnection();
   }
 
-  getPoolTableFromWebSocket(): PoolTableModel {
+  initializeWebSocketConnection(): void {
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
     let that = this;
     this.stompClient.connect({}, function (frame) {
       that.stompClient.subscribe("/topic/pooltable", message => {
-        that.lastPoolTable = new PoolTableModel();
-        that.lastPoolTable.balls = message.balls;
-        that.lastPoolTable.tableImage = message.tableImage;
-        that.lastPoolTable.cue = message.cue;
+        let poolTableObject = JSON.parse(message.body);
+        that.lastPoolTable = poolTableObject;
       })
     });
-    return this.lastPoolTable;
   }
   /*getPoolTableObject(): PoolTableModel {
     let that = this;
@@ -44,7 +42,7 @@ export class PoolTableService {
     return this.lastPoolTable;
   }*/
 
-  getLastFrame(): PoolTableModel {
+  getLastPoolTable(): PoolTableModel {
     return this.lastPoolTable;
   }
 }

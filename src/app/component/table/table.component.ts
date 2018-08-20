@@ -7,6 +7,7 @@ import {PoolTableService} from "../../shared/service/pool.table.service";
 import {BallModel} from "../../shared/model/ball.model";
 import {PoolTableModel} from "../../shared/model/pool.table.model";
 import {PreviousPositionService} from "../../shared/service/previous-position.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -37,7 +38,6 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
     this.getDivision();
-    this.getPoolTableObject();
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
@@ -74,7 +74,7 @@ export class TableComponent implements OnInit {
     raster.scale(tableConfig.scale, tableConfig.scale);
     let that = this;
     raster.onError = function() {
-      let lastPoolTable = that.poolTableService.getLastFrame();
+      let lastPoolTable = that.poolTableService.getLastPoolTable();
       if (lastPoolTable != null)
         that.image.src = "data:image/jpg;base64," + lastPoolTable.tableImage;
       that.image = new Image();
@@ -91,7 +91,7 @@ export class TableComponent implements OnInit {
 
   getPoolTableObject(): PoolTableModel {
     //let poolTableObject = this.poolTableService.getPoolTableObject();
-    let poolTableObject = this.poolTableService.getPoolTableFromWebSocket();
+    let poolTableObject = this.poolTableService.getLastPoolTable();
     console.log(poolTableObject);
     if (poolTableObject != null)
     {
