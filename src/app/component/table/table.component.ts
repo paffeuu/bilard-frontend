@@ -7,7 +7,8 @@ import {PoolTableService} from "../../shared/service/pool.table.service";
 import {BallModel} from "../../shared/model/ball.model";
 import {PoolTableModel} from "../../shared/model/pool.table.model";
 import {PreviousPositionService} from "../../shared/service/previous-position.service";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-table',
@@ -27,6 +28,8 @@ export class TableComponent implements OnInit {
   scope: PaperScope;
   project: Project;
 
+  poolTableObservable: Observable<any>;
+
   constructor(private dataService: DataService, private poolTableService: PoolTableService,
               private prevPosService: PreviousPositionService) {
     setInterval(() => {
@@ -38,6 +41,7 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
     this.getDivision();
+    this.poolTableObservable = this.poolTableService.getPoolTable();
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
@@ -48,6 +52,8 @@ export class TableComponent implements OnInit {
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
 
+    //this.initializeWebSocket();
+    this.initializePoolTableSubject();
     this.initalizeCanvas();
     this.refreshComponent();
   }
@@ -65,7 +71,40 @@ export class TableComponent implements OnInit {
     lines.name = "lines";
   }
 
+  initializePoolTableSubject(): void {
+    let observer = {
+      next: (poolTableObject) => {
+        console.log("elo mordo mam wiadomosc");
+        if (poolTableObject)
+        {
+          console.log("oto ona:")
+          console.log(poolTableObject);
+          this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
+          this.cueBalls = poolTableObject.balls;
+        }
+      }
+    };
+    this.poolTableObservable.subscribe(observer);
+  }
+
+  /*initializeWebSocket(): void {
+    this.poolTableObservable = this.webSocketService.connect();
+    console.log(this.poolTableObservable);
+    let observer = {
+      next: (message) => {
+        console.log("elo mordo mam wiadomosc");
+        let poolTableObject = JSON.parse(message.body);
+        console.log("oto ona:")
+        console.log(poolTableObject);
+        this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
+        this.cueBalls = poolTableObject.balls;
+      }
+    };
+    this.poolTableObservable.subscribe(observer);
+  }*/
+
   initializeRaster(): void {
+
     let raster = new Raster({
       image: this.image,
       name: "raster",
@@ -73,24 +112,23 @@ export class TableComponent implements OnInit {
     });
     raster.scale(tableConfig.scale, tableConfig.scale);
     let that = this;
-    raster.onError = function() {
+    /*raster.onError = function() {
       let lastPoolTable = that.poolTableService.getLastPoolTable();
       if (lastPoolTable != null)
         that.image.src = "data:image/jpg;base64," + lastPoolTable.tableImage;
       that.image = new Image();
       raster.image = that.image;
-    }
+    }*/
   }
 
   refreshComponent(): void {
-    this.getPoolTableObject();
+    //this.getPoolTableObject();
     this.getDivision();
     this.getHighlight();
     this.getShowPrevPosition();
   }
 
-  getPoolTableObject(): PoolTableModel {
-    //let poolTableObject = this.poolTableService.getPoolTableObject();
+  /*getPoolTableObject(): PoolTableModel {
     let poolTableObject = this.poolTableService.getLastPoolTable();
     console.log(poolTableObject);
     if (poolTableObject != null)
@@ -99,7 +137,7 @@ export class TableComponent implements OnInit {
       this.cueBalls = poolTableObject.balls;
     }
     return poolTableObject;
-  }
+  }*/
 
   getDivision(): void {
     this.dataService

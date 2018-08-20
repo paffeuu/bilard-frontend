@@ -4,6 +4,7 @@ import {PoolTableModel} from "../model/pool.table.model";
 import {environment} from "../../../environments/environment";
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
+import {Observable, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,12 @@ export class PoolTableService {
   private serverUrl = 'http://localhost:8090/socket';
   private stompClient;
 
+  private poolTableSubject: Subject<any>;
+
   constructor(private http: HttpClient) {
+    this.poolTableSubject = new Subject<any>();
     this.initializeWebSocketConnection();
+
   }
 
   initializeWebSocketConnection(): void {
@@ -25,10 +30,11 @@ export class PoolTableService {
     this.stompClient.connect({}, function (frame) {
       that.stompClient.subscribe("/topic/pooltable", message => {
         let poolTableObject = JSON.parse(message.body);
-        that.lastPoolTable = poolTableObject;
+        that.setPoolTable(poolTableObject);
       })
     });
   }
+
   /*getPoolTableObject(): PoolTableModel {
     let that = this;
     this.http.get<PoolTableModel>(
@@ -42,7 +48,13 @@ export class PoolTableService {
     return this.lastPoolTable;
   }*/
 
-  getLastPoolTable(): PoolTableModel {
-    return this.lastPoolTable;
+  getPoolTable() {
+    return this.poolTableSubject.asObservable();
   }
+
+  setPoolTable(poolTableObject) {
+    this.poolTableSubject.next(poolTableObject);
+    console.log(this.poolTableSubject);
+  }
+
 }

@@ -37,6 +37,7 @@ export class CueBallsComponent implements OnInit {
     let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
     stripes.removeChildren();
     let that = this;
+    if (!this.cueBalls) return;
     this.cueBalls.forEach((ball) => {
       let circle = new Path.Circle(
         new Point(ball.x * tableConfig.scale, ball.y * tableConfig.scale),
