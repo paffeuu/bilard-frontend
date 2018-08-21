@@ -42,18 +42,18 @@ export class CueBallsComponent implements OnInit {
       let circle = new Path.Circle(
         new Point(ball.x * tableConfig.scale, ball.y * tableConfig.scale),
         ballsConfig.radius * tableConfig.scale);
-      if (ball.id >= 0 && ball.id <= 7) { // // tu warunek dla całych i połówek
+      if (ball.id >= 0 && ball.id <= 7) { // warunek dla "całych"
         solids.addChild(circle);
-        circle.onMouseMove = function() {    // tu będzie podświetlanie całych
+        circle.onMouseMove = function() {
           let solids = that.project.activeLayer.children["solids"];
           solids.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
         };
         circle.onMouseLeave = function () {
           solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         };
-      } else if (ball.id >= 8 && ball.id <= 15) {
+      } else if (ball.id >= 8) {          // warunek dla "połówek"
         stripes.addChild(circle);
-        circle.onMouseMove = function () {    // tu będzie podświetlanie połówek
+        circle.onMouseMove = function () {
           stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
         };
         circle.onMouseLeave = function () {

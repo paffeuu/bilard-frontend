@@ -7,7 +7,6 @@ import {Observable, Subject} from "rxjs";
 export class DataService {
   private divisionLinesSubject = new Subject<any>();
   private cueBallsHighlightSubject = new Subject<any>();
-  private showPrevPosSubject = new Subject<any>();
 
   setDivisionLines(d: number): void {
     this.divisionLinesSubject.next({ division: d });
@@ -23,14 +22,6 @@ export class DataService {
 
   getCueBallsHighlight(): Observable<any> {
     return this.cueBallsHighlightSubject.asObservable();
-  }
-
-  setShowPrevPosition(): void {
-    this.showPrevPosSubject.next({ change: true });
-  }
-
-  getShowPrevPosition(): Observable<any> {
-    return this.showPrevPosSubject.asObservable();
   }
 
   constructor() {}

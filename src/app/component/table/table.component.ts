@@ -5,8 +5,8 @@ import {PaperScope, Point, Project, Raster, Group} from 'paper';
 import {environment, tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {BallModel} from "../../shared/model/ball.model";
-import {PreviousPositionService} from "../../shared/service/previous-position.service";
 import {Observable} from "rxjs";
+import {properties} from "../../shared/service/properties.service";
 
 @Component({
   selector: 'app-table',
@@ -19,7 +19,6 @@ export class TableComponent implements OnInit {
   image: any;
   divisionLines: number = 0;
   ballsHighlight: number = 0;
-  showPrevPos: boolean = false;
 
   cueBalls: BallModel[];
 
@@ -28,11 +27,11 @@ export class TableComponent implements OnInit {
 
   poolTableObservable: Observable<any>;
 
-  constructor(private dataService: DataService, private poolTableService: PoolTableService,
-              private prevPosService: PreviousPositionService) {
+  constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
       this.refreshComponent();
     }, 1000 / environment.fps);
+    console.log(properties);
   }
 
   ngOnInit() {
@@ -92,7 +91,6 @@ export class TableComponent implements OnInit {
   refreshComponent(): void {
     this.getDivision();
     this.getHighlight();
-    this.getShowPrevPosition();
   }
 
   getDivision(): void {
@@ -115,16 +113,4 @@ export class TableComponent implements OnInit {
     });
   }
 
-  getShowPrevPosition(): void {
-    this.dataService
-      .getShowPrevPosition().subscribe(
-        response => {
-          if (this.showPrevPos != response)
-          {
-            this.showPrevPos = response;
-            this.prevPosService.setShowPrevPosition();
-          }
-        },
-        error => console.log(error));
-  }
 }

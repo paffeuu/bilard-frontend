@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from "../../../shared/service/data.service";
+import {PropertiesService} from "../../../shared/service/properties.service";
 
 @Component({
   selector: 'app-left-menu',
@@ -8,9 +9,11 @@ import {DataService} from "../../../shared/service/data.service";
 })
 export class LeftMenuComponent implements OnInit {
   division: number = 0;
-  showPrevPos: boolean = true;
+  showPrevPos: boolean = false;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private propertiesService: PropertiesService) {
+    this.sendChangeShowPrevPositionToService();
+  }
 
   ngOnInit() {
   }
@@ -20,7 +23,7 @@ export class LeftMenuComponent implements OnInit {
   }
 
   sendChangeShowPrevPositionToService(): void {
-    this.dataService.setShowPrevPosition();
+    this.propertiesService.setShowPreviousPosition(this.showPrevPos);
   }
 
 }
