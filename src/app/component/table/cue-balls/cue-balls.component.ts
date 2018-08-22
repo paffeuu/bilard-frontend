@@ -25,6 +25,8 @@ export class CueBallsComponent implements OnInit {
   cueBalls: BallModel[];
   @Input()
   ballsHighlight: number;
+  @Input()
+  scale: number;
 
   refreshComponent() {
     this.drawCueBalls();
@@ -40,8 +42,8 @@ export class CueBallsComponent implements OnInit {
     if (!this.cueBalls) return;
     this.cueBalls.forEach((ball) => {
       let circle = new Path.Circle(
-        new Point(ball.x * tableConfig.scale, ball.y * tableConfig.scale),
-        ballsConfig.radius * tableConfig.scale);
+        new Point(ball.x * this.scale, ball.y * this.scale),
+        ballsConfig.radius * this.scale);
       if (ball.id >= 0 && ball.id <= 7) { // warunek dla "całych"
         solids.addChild(circle);
         circle.onMouseMove = function() {

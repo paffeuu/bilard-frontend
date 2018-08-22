@@ -22,9 +22,11 @@ export class DivisionLinesComponent implements OnInit {
   project: Project;
   @Input()
   divisionLines: number;
+  @Input()
+  scale: number;
 
-  width = tableConfig.width * tableConfig.scale;
-  height = tableConfig.height * tableConfig.scale;
+  width = tableConfig.width * this.scale;
+  height = tableConfig.height * this.scale;
 
   refreshComponent() {
     this.drawDivisionLines();
