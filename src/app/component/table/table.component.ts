@@ -28,6 +28,7 @@ export class TableComponent implements OnInit {
   project: Project;
 
   poolTableObservable: Observable<any>;
+  poolTableObserver: any;
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
@@ -76,7 +77,7 @@ export class TableComponent implements OnInit {
   }
 
   initializePoolTableSubject(): void {
-    let observer = {
+    this.poolTableObserver = {
       next: (poolTableObject) => {
         if (poolTableObject)
         {
@@ -85,7 +86,7 @@ export class TableComponent implements OnInit {
         }
       }
     };
-    this.poolTableObservable.subscribe(observer);
+    this.poolTableObservable.subscribe(this.poolTableObserver);
   }
 
   initializeRaster(): void {
@@ -96,7 +97,12 @@ export class TableComponent implements OnInit {
       position: new Point(this.width /2, this.height /2)
     });
     raster.scale(this.scale, this.scale);
+    let that = this;
+    raster.onError = function() {
+      that.poolTableObserver.next();
+    }
   }
+
 
   refreshComponent(): void {
     this.getDivision();

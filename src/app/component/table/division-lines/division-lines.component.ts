@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Group, Path, Point, Project} from 'paper';
+import {Path, Point, Project, PaperScope} from 'paper';
 import {environment, linesConfig, tableConfig} from "../../../../environments/environment";
 
 @Component({
@@ -9,24 +9,40 @@ import {environment, linesConfig, tableConfig} from "../../../../environments/en
 })
 export class DivisionLinesComponent implements OnInit {
 
+  width: number;
+  height: number;
+
+  @Input()
+  project: Project;
+  @Input()
+  scope: PaperScope;
+  @Input()
+  divisionLines: number;
+  @Input()
+  scale: number;
+
   constructor() {
     setInterval(() => {
       this.refreshComponent();
     }, 1000 / environment.fps);
   }
 
+
   ngOnInit() {
   }
 
-  @Input()
-  project: Project;
-  @Input()
-  divisionLines: number;
-  @Input()
-  scale: number;
+  ngOnChanges() {
+    this.initializeViewSize();
+  }
 
-  width = tableConfig.width * this.scale;
-  height = tableConfig.height * this.scale;
+
+  initializeViewSize(): void {
+    this.width = this.scope.view.viewSize.width;
+    this.height = this.width * 0.75;
+    this.scope.view.viewSize.height = this.height;
+    this.scale = this.width / tableConfig.width;
+  }
+
 
   refreshComponent() {
     this.drawDivisionLines();
@@ -35,6 +51,7 @@ export class DivisionLinesComponent implements OnInit {
 
   drawDivisionLines(): void {
     let lines = this.project.activeLayer.children["lines"];
+    console.log(this.project);
     lines.removeChildren();
     for (let i = 1; i <= this.divisionLines; ++i) {
       let line = new Path.Line(new Point(this.width / (this.divisionLines + 1) * i, 0),
@@ -42,5 +59,10 @@ export class DivisionLinesComponent implements OnInit {
       line.strokeColor = linesConfig.lineColor;
       lines.addChild(line);
     }
+    lines.bringToFront();
+    console.log(this.divisionLines);
+    console.log(this.scale);
+    console.log(this.width);
+    console.log(this.height);
   }
 }

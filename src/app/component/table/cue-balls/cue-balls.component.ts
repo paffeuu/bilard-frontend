@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Item, Path, Point, Project} from 'paper';
+import {Item, Path, Point, Project, PaperScope} from 'paper';
 import {ballsConfig, environment, tableConfig} from "../../../../environments/environment";
 import {BallModel} from "../../../shared/model/ball.model";
 
@@ -19,6 +19,21 @@ export class CueBallsComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    this.initializeViewSize();
+  }
+
+  initializeViewSize(): void {
+    this.width = this.scope.view.viewSize.width;
+    this.height = this.width * 0.75;
+    this.scope.view.viewSize.height = this.height;
+    this.scale = this.width / tableConfig.width;
+  }
+
+  width: number;
+  height: number;
+  scale: number;
+
   @Input()
   project: Project;
   @Input()
@@ -26,7 +41,7 @@ export class CueBallsComponent implements OnInit {
   @Input()
   ballsHighlight: number;
   @Input()
-  scale: number;
+  scope: PaperScope;
 
   refreshComponent() {
     this.drawCueBalls();
