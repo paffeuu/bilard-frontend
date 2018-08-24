@@ -1,6 +1,5 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {BottomMenuComponent} from "./bottom-menu/bottom-menu.component";
 import {LeftMenuComponent} from "./left-menu/left-menu.component";
 import {RightMenuComponent} from "./right-menu/right-menu.component";
 import {SliderModule} from "primeng/slider";
@@ -17,12 +16,10 @@ import {ButtonModule, RadioButtonModule, InputSwitchModule} from "primeng/primen
     InputSwitchModule
   ],
   declarations: [
-    BottomMenuComponent,
     LeftMenuComponent,
     RightMenuComponent
   ],
   exports: [
-    BottomMenuComponent,
     LeftMenuComponent,
     RightMenuComponent
   ],

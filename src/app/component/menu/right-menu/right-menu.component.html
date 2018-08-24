@@ -1,16 +1,17 @@
-<div class="menu-component ui-g-2">
-  <div class="menu-component-title">
-    Wyświetl bile
+
+  <div class="menu-component">
+    <div class="menu-component-title">
+      Wyświetl bile
+    </div>
+    <div class="ui-g" style="width:250px;margin-bottom:10px">
+      <div class="ui-g-12">
+        <p-radioButton name="group2" value="0" label="brak" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
+      </div>
+      <div class="ui-g-12">
+        <p-radioButton name="group2" value="1" label="całe" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
+      </div>
+      <div class="ui-g-12">
+        <p-radioButton name="group2" value="2" label="połówki" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
+      </div>
+    </div>
   </div>
-  <div class="ui-g" style="width:250px;margin-bottom:10px">
-    <div class="ui-g-12">
-      <p-radioButton name="group2" value="0" label="brak" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
-    </div>
-    <div class="ui-g-12">
-      <p-radioButton name="group2" value="1" label="całe" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
-    </div>
-    <div class="ui-g-12">
-      <p-radioButton name="group2" value="2" label="połówki" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
-    </div>
-  </div>
-</div>

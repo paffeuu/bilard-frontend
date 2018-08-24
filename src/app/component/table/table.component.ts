@@ -99,15 +99,15 @@ export class TableComponent implements OnInit {
     raster.scale(this.scale, this.scale);
     let that = this;
     raster.onError = function() {
-      that.poolTableObserver.next();
-    }
+      that.poolTableObservable.subscribe(
+        (poolTableObject) =>
+          that.poolTableObserver.next(poolTableObject));
+    };
   }
-
 
   refreshComponent(): void {
     this.getDivision();
     this.getHighlight();
-
   }
 
   getDivision(): void {
@@ -129,5 +129,4 @@ export class TableComponent implements OnInit {
       console.error(error);
     });
   }
-
 }

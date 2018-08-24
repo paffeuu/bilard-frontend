@@ -59,7 +59,7 @@ export class CueBallsComponent implements OnInit {
       let circle = new Path.Circle(
         new Point(ball.x * this.scale, ball.y * this.scale),
         ballsConfig.radius * this.scale);
-      if (ball.id >= 0 && ball.id <= 7) { // warunek dla "całych"
+      if (ball.id >= 10 && ball.id <= 29) { // warunek dla "całych"
         solids.addChild(circle);
         circle.onMouseMove = function() {
           let solids = that.project.activeLayer.children["solids"];
@@ -68,7 +68,7 @@ export class CueBallsComponent implements OnInit {
         circle.onMouseLeave = function () {
           solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         };
-      } else if (ball.id >= 8) {          // warunek dla "połówek"
+      } else if (ball.id >= 30) {          // warunek dla "połówek"
         stripes.addChild(circle);
         circle.onMouseMove = function () {
           stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
@@ -76,9 +76,10 @@ export class CueBallsComponent implements OnInit {
         circle.onMouseLeave = function () {
           stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         };
+      } else {
+        circle.remove();
       }
       CueBallsComponent.setCircleUnhighlighted(circle);
-
     })
   }
 
@@ -99,9 +100,6 @@ export class CueBallsComponent implements OnInit {
         solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
         stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
         break;
-      default:
-        console.error("Invalid value of variable 'ballsHighlight'");
-        console.log(this.ballsHighlight)
     }
   }
 

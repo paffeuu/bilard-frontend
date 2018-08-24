@@ -27,14 +27,12 @@ export class DivisionLinesComponent implements OnInit {
     }, 1000 / environment.fps);
   }
 
-
   ngOnInit() {
   }
 
   ngOnChanges() {
     this.initializeViewSize();
   }
-
 
   initializeViewSize(): void {
     this.width = this.scope.view.viewSize.width;
@@ -43,15 +41,12 @@ export class DivisionLinesComponent implements OnInit {
     this.scale = this.width / tableConfig.width;
   }
 
-
   refreshComponent() {
     this.drawDivisionLines();
   }
 
-
   drawDivisionLines(): void {
     let lines = this.project.activeLayer.children["lines"];
-    console.log(this.project);
     lines.removeChildren();
     for (let i = 1; i <= this.divisionLines; ++i) {
       let line = new Path.Line(new Point(this.width / (this.divisionLines + 1) * i, 0),
@@ -60,9 +55,5 @@ export class DivisionLinesComponent implements OnInit {
       lines.addChild(line);
     }
     lines.bringToFront();
-    console.log(this.divisionLines);
-    console.log(this.scale);
-    console.log(this.width);
-    console.log(this.height);
   }
 }

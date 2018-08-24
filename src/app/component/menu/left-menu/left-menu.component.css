@@ -1,27 +1,16 @@
-:host {
-  font-weight: bold;
-}
-
 p-slider {
   padding-left: 5%;
 }
 
-.button-container {
-  display: grid;
+.menu-component {
+  font-weight: bold;
+  background-color: #0d707a;
+  border: 2px solid #0c505a;
+  padding: 10px;
 }
-
-button {
-  font-size: 14px;
-  padding: 1%;
-  margin: 2%;
-}
-
-#delete-button {
-  background: red;
-}
-
-.inputswitch {
-  margin-left: auto;
-  margin-right: auto;
-  width: auto;
+.menu-component .menu-component-title {
+  font-size: 18px;
+  border-bottom: 1px dotted gray;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
 }
