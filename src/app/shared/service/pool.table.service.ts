@@ -36,7 +36,6 @@ export class PoolTableService {
 
   setPoolTable(poolTableObject) {
     this.poolTableSubject.next(poolTableObject);
-    console.log(this.poolTableSubject);
   }
 
 }

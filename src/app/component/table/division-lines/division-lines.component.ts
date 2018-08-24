@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Group, Path, Point, Project} from 'paper';
+import {Path, Point, Project, PaperScope} from 'paper';
 import {environment, linesConfig, tableConfig} from "../../../../environments/environment";
 
 @Component({
@@ -8,6 +8,18 @@ import {environment, linesConfig, tableConfig} from "../../../../environments/en
   styleUrls: ['./division-lines.component.css']
 })
 export class DivisionLinesComponent implements OnInit {
+
+  width: number;
+  height: number;
+
+  @Input()
+  project: Project;
+  @Input()
+  scope: PaperScope;
+  @Input()
+  divisionLines: number;
+  @Input()
+  scale: number;
 
   constructor() {
     setInterval(() => {
@@ -18,18 +30,20 @@ export class DivisionLinesComponent implements OnInit {
   ngOnInit() {
   }
 
-  @Input()
-  project: Project;
-  @Input()
-  divisionLines: number;
+  ngOnChanges() {
+    this.initializeViewSize();
+  }
 
-  width = tableConfig.width * tableConfig.scale;
-  height = tableConfig.height * tableConfig.scale;
+  initializeViewSize(): void {
+    this.width = this.scope.view.viewSize.width;
+    this.height = this.width * 0.75;
+    this.scope.view.viewSize.height = this.height;
+    this.scale = this.width / tableConfig.width;
+  }
 
   refreshComponent() {
     this.drawDivisionLines();
   }
-
 
   drawDivisionLines(): void {
     let lines = this.project.activeLayer.children["lines"];
@@ -40,5 +54,6 @@ export class DivisionLinesComponent implements OnInit {
       line.strokeColor = linesConfig.lineColor;
       lines.addChild(line);
     }
+    lines.bringToFront();
   }
 }

@@ -1,5 +1,3 @@
-<div class="ui-g-8">
-  <canvas #poolTableView class="main-canvas" width="{{width}}" height="{{height}}"></canvas>
-  <app-cueballs [project]="project" [cueBalls]="cueBalls" [ballsHighlight]="ballsHighlight"></app-cueballs>
-  <app-divisionlines [project]="project" [divisionLines]="divisionLines"></app-divisionlines>
-</div>
+<canvas #poolTableView id="main-canvas"></canvas>
+<app-cueballs [ballsHighlight]="ballsHighlight" [project]="project" [scope]="scope" [cueBalls]="cueBalls"></app-cueballs>
+<app-divisionlines [divisionLines]="divisionLines" [project]="project" [scope]="scope"></app-divisionlines>

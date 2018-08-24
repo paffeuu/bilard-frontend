@@ -1,0 +1,12 @@
+.menu-component {
+  font-weight: bold;
+  border: 2px solid #0c505a;
+  background-color: #0d707a;
+  padding: 10px;
+}
+.menu-component .menu-component-title {
+  font-size: 18px;
+  border-bottom: 1px dotted gray;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}

@@ -14,8 +14,10 @@ import {properties} from "../../shared/service/properties.service";
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-  width = tableConfig.width * tableConfig.scale;
-  height = tableConfig.height * tableConfig.scale;
+  width: number;
+  height: number;
+  scale: number;
+
   image: any;
   divisionLines: number = 0;
   ballsHighlight: number = 0;
@@ -26,6 +28,7 @@ export class TableComponent implements OnInit {
   project: Project;
 
   poolTableObservable: Observable<any>;
+  poolTableObserver: any;
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService) {
     setInterval(() => {
@@ -47,9 +50,17 @@ export class TableComponent implements OnInit {
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
 
+    this.initializeViewSize();
     this.initializePoolTableSubject();
     this.initalizeCanvas();
     this.refreshComponent();
+  }
+
+  initializeViewSize(): void {
+    this.width = this.scope.view.viewSize.width;
+    this.height = this.width * 0.75;
+    this.scope.view.viewSize.height = this.height;
+    this.scale = this.width / tableConfig.width;
   }
 
   initalizeCanvas(): void {
@@ -66,7 +77,7 @@ export class TableComponent implements OnInit {
   }
 
   initializePoolTableSubject(): void {
-    let observer = {
+    this.poolTableObserver = {
       next: (poolTableObject) => {
         if (poolTableObject)
         {
@@ -75,7 +86,7 @@ export class TableComponent implements OnInit {
         }
       }
     };
-    this.poolTableObservable.subscribe(observer);
+    this.poolTableObservable.subscribe(this.poolTableObserver);
   }
 
   initializeRaster(): void {
@@ -85,7 +96,13 @@ export class TableComponent implements OnInit {
       name: "raster",
       position: new Point(this.width /2, this.height /2)
     });
-    raster.scale(tableConfig.scale, tableConfig.scale);
+    raster.scale(this.scale, this.scale);
+    let that = this;
+    raster.onError = function() {
+      that.poolTableObservable.subscribe(
+        (poolTableObject) =>
+          that.poolTableObserver.next(poolTableObject));
+    };
   }
 
   refreshComponent(): void {
@@ -112,5 +129,4 @@ export class TableComponent implements OnInit {
       console.error(error);
     });
   }
-
 }

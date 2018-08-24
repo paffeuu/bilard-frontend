@@ -5,24 +5,23 @@
 export const environment = {
   production: false,
   url: "http://localhost:8090/pooltable",
-  fps: 4
+  fps: 2    // częstość odświeżania podświetleń bil i liń podziału
 };
 
 export const tableConfig = {
   width: 2048,  // rozdzielczość zdjęcia z kamery
-  height: 1536,
-  scale: 0.425   // skala -> image/source-image
-}
+  height: 1536
+};
 
 export const ballsConfig = {
   radius: 20,
   solidsColor: "#ff0000",
   stripesColor: "#00ff00"
-}
+};
 
 export const linesConfig = {
   lineColor: "black"
-}
+};
 
 /*
  * In development mode, to ignore zone related error stack frames such as

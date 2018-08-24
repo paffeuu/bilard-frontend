@@ -1,9 +1,5 @@
-:host {
-  display: block;
-  margin: 0.4%;
-}
-
-.main-canvas {
-  max-width: 100%;
-  max-height: 100%;
+#main-canvas {
+  width: 100%;
+  background: #cacbc8 url("/src/assets/ncdc.png") no-repeat center;
+  border: #0c505a 6px solid;
 }
