@@ -10,9 +10,11 @@ import {PropertiesService} from "../../../shared/service/properties.service";
 export class LeftMenuComponent implements OnInit {
   division: number = 0;
   showPrevPos: boolean = false;
+  debugActive: boolean = false;
 
   constructor(private dataService: DataService, private propertiesService: PropertiesService) {
-    this.sendChangeShowPrevPositionToService();
+      this.sendChangeShowPrevPositionToService();
+      this.sendDebugActiveToService();
   }
 
   ngOnInit() {
@@ -24,6 +26,10 @@ export class LeftMenuComponent implements OnInit {
 
   sendChangeShowPrevPositionToService(): void {
     this.propertiesService.setShowPreviousPosition(this.showPrevPos);
+  }
+
+  sendDebugActiveToService(): void {
+    this.propertiesService.setDebugActive(this.debugActive);
   }
 
 }

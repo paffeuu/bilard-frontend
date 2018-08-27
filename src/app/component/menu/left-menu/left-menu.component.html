@@ -21,4 +21,15 @@
     </div>
   </div>
 </div>
+<div class="menu-component">
+  <div class="menu-component-title">
+    Debug
+  </div>
+  <div class="ui-g" style="width:250px;margin-bottom:10px">
+    <div class="ui-g-3"></div>
+    <div class="ui-g-2">
+      <p-inputSwitch [(ngModel)]="debugActive" (onChange)="sendDebugActiveToService()" class="inputswitch"></p-inputSwitch>
+    </div>
+  </div>
+</div>
 
