@@ -28,7 +28,7 @@ export class PropertiesService {
   }
 
   setDebugActive(debugActive: boolean) {
-    properties.debugActive = debugActive;
+    properties.isDebugActive = debugActive;
     this.sendAllProperties();
   }
 
