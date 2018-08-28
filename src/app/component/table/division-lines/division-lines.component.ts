@@ -36,8 +36,7 @@ export class DivisionLinesComponent implements OnInit {
 
   initializeViewSize(): void {
     this.width = this.scope.view.viewSize.width;
-    this.height = this.width * 0.75;
-    this.scope.view.viewSize.height = this.height;
+    this.height = this.width * (tableConfig.height / tableConfig.width);
     this.scale = this.width / tableConfig.width;
   }
 

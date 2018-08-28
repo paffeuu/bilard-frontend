@@ -9,12 +9,12 @@ export const environment = {
 };
 
 export const tableConfig = {
-  width: 2048,  // rozdzielczość zdjęcia z kamery
-  height: 1536
+  width: 1280,  // rozdzielczość zdjęcia z kamery
+  height: 720
 };
 
 export const ballsConfig = {
-  radius: 20,
+  radius: 10,
   solidsColor: "#ff0000",
   stripesColor: "#00ff00"
 };

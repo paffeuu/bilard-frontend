@@ -56,9 +56,10 @@ export class TableComponent implements OnInit {
     this.refreshComponent();
   }
 
+
   initializeViewSize(): void {
     this.width = this.scope.view.viewSize.width;
-    this.height = this.width * 0.75;
+    this.height = this.width * (tableConfig.height / tableConfig.width);
     this.scope.view.viewSize.height = this.height;
     this.scale = this.width / tableConfig.width;
   }
