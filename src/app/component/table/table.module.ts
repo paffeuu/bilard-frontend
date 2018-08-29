@@ -4,6 +4,7 @@ import {TableComponent} from "./table.component";
 import { CueBallsComponent } from './cue-balls/cue-balls.component';
 import { DivisionLinesComponent } from './division-lines/division-lines.component';
 import {SliderModule} from "primeng/slider";
+import { ProjectorComponentComponent } from './projector-component/projector-component.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {SliderModule} from "primeng/slider";
   declarations: [
     TableComponent,
     CueBallsComponent,
-    DivisionLinesComponent
+    DivisionLinesComponent,
+    ProjectorComponentComponent
   ],
   exports: [
     TableComponent

@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  background: #1295A2;
+  /*background: #1295A2;*/
+  background-color: black;
+  overflow: hidden;
 }
 
 * {
