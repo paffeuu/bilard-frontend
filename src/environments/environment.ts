@@ -14,7 +14,7 @@ export const tableConfig = {
 };
 
 export const ballsConfig = {
-  radius: 10,
+  radius: 13,
   solidsColor: "#ff0000",
   stripesColor: "#00ff00"
 };
@@ -22,6 +22,10 @@ export const ballsConfig = {
 export const linesConfig = {
   lineColor: "black"
 };
+
+export const pocketConfig = {
+  leftTopPocket: {xMin: 100, xMax: 200, yMin: 20, yMax: 60}
+}
 
 /*
  * In development mode, to ignore zone related error stack frames such as

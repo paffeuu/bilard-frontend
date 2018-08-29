@@ -20,6 +20,7 @@ export class PropertiesService {
         response => properties = response,
         error => console.log(error)
       );
+    console.log(properties);
   }
 
   setShowPreviousPosition(showPrevPos: boolean) {
@@ -27,4 +28,13 @@ export class PropertiesService {
     this.sendAllProperties();
   }
 
+  setDebugActive(debugActive: boolean) {
+    properties.debugActive = debugActive;
+    this.sendAllProperties();
+  }
+
+  setGameMode(gameMode: number) {
+    properties.gameMode = gameMode;
+    this.sendAllProperties();
+  }
 }

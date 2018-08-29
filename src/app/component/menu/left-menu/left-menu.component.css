@@ -2,6 +2,10 @@ p-slider {
   padding-left: 5%;
 }
 
+#game-mode {
+  display: block;
+}
+
 .menu-component {
   font-weight: bold;
   background-color: #0d707a;
@@ -12,5 +16,13 @@ p-slider {
   font-size: 18px;
   border-bottom: 1px dotted gray;
   padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+#game-mode-name
+{
+  color: yellow;
+  font-size: 20px;
+  width: auto;
   margin-bottom: 5px;
 }

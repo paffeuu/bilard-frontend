@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Item, Path, Point, Project, PaperScope} from 'paper';
 import {ballsConfig, environment, tableConfig} from "../../../../environments/environment";
 import {BallModel} from "../../../shared/model/ball.model";
+import {DataService} from "../../../shared/service/data.service";
+import {BallPocketChooseService} from "../../../shared/service/ball-pocket-choose.service";
 
 @Component({
   selector: 'app-cueballs',
@@ -10,7 +12,7 @@ import {BallModel} from "../../../shared/model/ball.model";
 })
 export class CueBallsComponent implements OnInit {
 
-  constructor() {
+  constructor(private ballPocketChooseService: BallPocketChooseService) {
     setInterval(() => {
       this.refreshComponent();
     }, 1000 / environment.fps);
@@ -58,6 +60,8 @@ export class CueBallsComponent implements OnInit {
       let circle = new Path.Circle(
         new Point(ball.x * this.scale, ball.y * this.scale),
         ballsConfig.radius * this.scale);
+      circle.onClick = function () {
+        that.ballPocketChooseService.setLastClickedCueBall(ball)};
       if (ball.id >= 10 && ball.id <= 29) { // warunek dla "całych"
         solids.addChild(circle);
         circle.onMouseMove = function() {
