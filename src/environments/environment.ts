@@ -15,6 +15,7 @@ export const tableConfig = {
 
 export const ballsConfig = {
   radius: 13,
+  hoopRadius: 20,
   solidsColor: "#ff0000",
   stripesColor: "#00ff00"
 };
@@ -24,8 +25,16 @@ export const linesConfig = {
 };
 
 export const pocketConfig = {
-  leftTopPocket: {xMin: 100, xMax: 200, yMin: 20, yMax: 60}
-}
+  pocketModel: [
+    {centerX: 148.0, centerY: 135.0, id: 0},
+    {centerX: 639.5, centerY: 135.0, id: 1},
+    {centerX: 1131.0, centerY: 135.0, id: 2},
+    {centerX: 1131.0, centerY: 630.0, id: 3},
+    {centerX: 639.5, centerY: 630.0, id: 4},
+    {centerX: 148.0, centerY: 630.0, id: 5},
+  ],
+  hoopRadius: 30
+};
 
 /*
  * In development mode, to ignore zone related error stack frames such as

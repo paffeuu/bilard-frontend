@@ -16,7 +16,6 @@ export class LeftMenuComponent implements OnInit {
   gameMode: number = 0;
   debugActive: boolean = false;
 
-
   constructor(private dataService: DataService, private propertiesService: PropertiesService,
               private ballPocketChooseService: BallPocketChooseService) {
     this.sendShowPrevPositionToProperties();
@@ -42,6 +41,7 @@ export class LeftMenuComponent implements OnInit {
       this.ballPocketChooseService.setBall();
     } else {
       this.propertiesService.setGameMode(this.gameMode);
+      this.ballPocketChooseService.setBallAndPocketUndefined();
     }
   }
 

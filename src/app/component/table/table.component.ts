@@ -75,6 +75,9 @@ export class TableComponent implements OnInit {
 
     let lines = new Group();
     lines.name = "lines";
+
+    let pockets = new Group();
+    pockets.name = "pockets";
   }
 
   initializePoolTableSubject(): void {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BallModel} from "../model/ball.model";
-import {Observable, Subject} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 
@@ -12,6 +12,8 @@ export class BallPocketChooseService {
   private lastClickedCueBallSubject = new Subject<BallModel>();
   private drawPocketsSubject = new Subject<any>();
   private lastClickedPocketSubject = new Subject<number>();
+  ballSubscription: Subscription;
+  pocketSubscription: Subscription;
   userBallPocket: any = {};
 
   constructor(private http: HttpClient) { }
@@ -40,18 +42,21 @@ export class BallPocketChooseService {
     let observer = {
       next: (ball) => {
         if (ball != null) {
-          that.userBallPocket.ball = ball;
+          that.userBallPocket.x = ball.x;
+          that.userBallPocket.y = ball.y;
           console.log("ball = " + ball.x + " " + ball.y);
           that.setPocket();
-          that.lastClickedCueBallSubject = new Subject<BallModel>();
+          this.ballSubscription.unsubscribe();
         }
       }
-    }
-    this.lastClickedCueBallSubject.asObservable().subscribe(observer);
+    };
+    this.ballSubscription = this.lastClickedCueBallSubject.asObservable().subscribe(observer);
   }
 
   setPocket() {
+    console.log("elo mordo");
     this.setLastClickedPocket(-1);
+    this.setDrawPockets(true);
     let that = this;
     let observer = {
       next: (pocket) => {
@@ -59,11 +64,17 @@ export class BallPocketChooseService {
           that.userBallPocket.pocket = pocket;
           console.log("pocket: " + pocket);
           that.sendToServer();
-          that.lastClickedPocketSubject = new Subject<number>();
+          this.pocketSubscription.unsubscribe();
+          that.setDrawPockets(false);
         }
       }
     };
-    this.lastClickedPocketSubject.asObservable().subscribe(observer);
+    this.pocketSubscription = this.lastClickedPocketSubject.asObservable().subscribe(observer);
+  }
+
+  setBallAndPocketUndefined(): void {
+    this.ballSubscription.unsubscribe();
+    this.pocketSubscription.unsubscribe();
   }
 
   sendToServer(): void {

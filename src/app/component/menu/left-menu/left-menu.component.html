@@ -6,7 +6,7 @@
     <div class="ui-g 12" id="game-mode">
       <div id="game-mode-name">{{getGameModeName()}}</div>
       <p-slider [(ngModel)]="gameMode" [style]="{'width':'5em', 'margin-left':'30%'}" [min]="0" [max]="2" [step]="1"
-                (onChange)="sendGameModeToProperties()" ></p-slider>
+                (onSlideEnd)="sendGameModeToProperties()" ></p-slider>
     </div>
   </div>
 </div>
