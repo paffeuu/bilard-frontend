@@ -1,28 +1,24 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
-import {DataService} from "../../../shared/service/data.service";
+import {DataService} from "../../shared/service/data.service";
 import {PaperScope, Point, Project, Raster, Group} from 'paper';
-import {environment, tableConfig} from "../../../../environments/environment";
-import {PoolTableService} from "../../../shared/service/pool.table.service";
-import {BallModel} from "../../../shared/model/ball.model";
+import {environment, tableConfig} from "../../../environments/environment";
+import {PoolTableService} from "../../shared/service/pool.table.service";
+import {BallModel} from "../../shared/model/ball.model";
 import {Observable} from "rxjs";
-import {properties} from "../../../shared/service/properties.service";
+import {properties} from "../../shared/service/properties.service";
 
 @Component({
   selector: 'app-table',
-  templateUrl: './projector-component.component.html',
-  styleUrls: ['./projector-component.component.css']
+  templateUrl: './projector.component.html',
+  styleUrls: ['./projector.component.css']
 })
-export class ProjectorComponentComponent implements OnInit {
+export class ProjectorComponent implements OnInit {
   width: number;
   height: number;
   scale: number;
 
   image: any;
-  divisionLines: number = 0;
-  ballsHighlight: number = 0;
-
-  cueBalls: BallModel[];
 
   scope: PaperScope;
   project: Project;
@@ -30,15 +26,9 @@ export class ProjectorComponentComponent implements OnInit {
   poolTableObservable: Observable<any>;
   poolTableObserver: any;
 
-  constructor(private dataService: DataService, private poolTableService: PoolTableService) {
-    setInterval(() => {
-      this.refreshComponent();
-    }, 1000 / environment.fps);
-    console.log(properties);
-  }
+  constructor(private dataService: DataService, private poolTableService: PoolTableService) {}
 
   ngOnInit() {
-    this.getDivision();
     this.poolTableObservable = this.poolTableService.getPoolTable();
   }
 
@@ -53,7 +43,6 @@ export class ProjectorComponentComponent implements OnInit {
     this.initializeViewSize();
     this.initializePoolTableSubject();
     this.initalizeCanvas();
-    this.refreshComponent();
   }
 
   initializeViewSize(): void {
@@ -65,15 +54,6 @@ export class ProjectorComponentComponent implements OnInit {
 
   initalizeCanvas(): void {
     this.initializeRaster();
-
-    let solids = new Group();     // bile "całe"
-    solids.name = "solids";
-
-    let stripes = new Group();    // bile "połówki"
-    stripes.name = "stripes";
-
-    let lines = new Group();
-    lines.name = "lines";
   }
 
   initializePoolTableSubject(): void {
@@ -82,7 +62,6 @@ export class ProjectorComponentComponent implements OnInit {
         if (poolTableObject)
         {
           this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
-          this.cueBalls = poolTableObject.balls;
         }
       }
     };
@@ -103,30 +82,5 @@ export class ProjectorComponentComponent implements OnInit {
         (poolTableObject) =>
           that.poolTableObserver.next(poolTableObject));
     };
-  }
-
-  refreshComponent(): void {
-    this.getDivision();
-    this.getHighlight();
-  }
-
-  getDivision(): void {
-    this.dataService
-      .getDivisionLines()
-      .subscribe(response => {
-        this.divisionLines = parseInt(response.division);
-      }, error => {
-        console.error(error);
-      });
-  }
-
-  getHighlight(): void {
-    this.dataService
-      .getCueBallsHighlight()
-      .subscribe(response => {
-        this.ballsHighlight = parseInt(response.highlight);
-      }, error => {
-        console.error(error);
-      });
   }
 }
