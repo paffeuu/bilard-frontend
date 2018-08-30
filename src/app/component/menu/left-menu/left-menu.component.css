@@ -26,3 +26,11 @@ p-slider {
   width: auto;
   margin-bottom: 5px;
 }
+
+.projector-button {
+  padding: 5px;
+  background: red;
+  width: 50%;
+  margin-left: 25%;
+  margin-right: auto;
+}

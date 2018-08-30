@@ -5,6 +5,7 @@ import {RightMenuComponent} from "./right-menu/right-menu.component";
 import {SliderModule} from "primeng/slider";
 import {FormsModule} from "@angular/forms";
 import {ButtonModule, RadioButtonModule, InputSwitchModule} from "primeng/primeng";
+import {AppRoutingModule} from "../../app-routing.module";
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import {ButtonModule, RadioButtonModule, InputSwitchModule} from "primeng/primen
     FormsModule,
     RadioButtonModule,
     ButtonModule,
-    InputSwitchModule
+    InputSwitchModule,
+    AppRoutingModule
   ],
   declarations: [
     LeftMenuComponent,

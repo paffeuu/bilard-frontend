@@ -1,12 +1,11 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
-import {PaperScope, Point, Project, Raster, Group} from 'paper';
-import {environment, tableConfig} from "../../../environments/environment";
+import {PaperScope, Point, Project, Raster} from 'paper';
+import {tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
-import {BallModel} from "../../shared/model/ball.model";
 import {Observable} from "rxjs";
-import {properties} from "../../shared/service/properties.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-table',
@@ -26,7 +25,8 @@ export class ProjectorComponent implements OnInit {
   poolTableObservable: Observable<any>;
   poolTableObserver: any;
 
-  constructor(private dataService: DataService, private poolTableService: PoolTableService) {}
+  constructor(private dataService: DataService, private poolTableService: PoolTableService,
+              private router: Router) {}
 
   ngOnInit() {
     this.poolTableObservable = this.poolTableService.getPoolTable();
@@ -43,6 +43,16 @@ export class ProjectorComponent implements OnInit {
     this.initializeViewSize();
     this.initializePoolTableSubject();
     this.initalizeCanvas();
+
+    window.addEventListener("keypress", evt => {
+      if (evt.keyCode == 13) {
+        this.router.navigate(['']);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+
   }
 
   initializeViewSize(): void {
