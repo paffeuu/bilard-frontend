@@ -1,0 +1,6 @@
+#main-canvas {
+  width: 100%;
+  /*background: #000000 url("/src/assets/ncdc.png") no-repeat center;*/
+  background-color: white;
+  /*border: #0c505a 6px solid;*/
+}

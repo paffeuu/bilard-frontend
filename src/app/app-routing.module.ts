@@ -4,7 +4,8 @@ import {NormalViewComponent} from "./normal-view.component";
 
 const routes: Routes = [
   {path: '', component: NormalViewComponent}
-];
+  // path -> Projector
+  ];
 
 @NgModule({
   imports: [
