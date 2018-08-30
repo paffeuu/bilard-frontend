@@ -8,11 +8,13 @@ import { AppRoutingModule } from "./app-routing.module";
 import {ButtonModule} from "primeng/button";
 import {HttpClientModule} from "@angular/common/http";
 import {MenuModule} from "./component/menu/menu.module";
+import { NormalViewComponent } from './normal-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    NormalViewComponent
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ export class LeftMenuComponent implements OnInit {
   showPrevPos: boolean = false;
   gameMode: number = 0;
   debugActive: boolean = false;
+  highlight: number = 0;
 
   constructor(private dataService: DataService, private propertiesService: PropertiesService,
               private ballPocketChooseService: BallPocketChooseService) {
@@ -57,5 +58,9 @@ export class LeftMenuComponent implements OnInit {
 
   sendDebugActiveToProperties(): void {
     this.propertiesService.setDebugActive(this.debugActive);
+  }
+
+  sendHighlightToService(): void {
+    this.dataService.setCueBallsHighlight(this.highlight);
   }
 }
