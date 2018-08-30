@@ -39,7 +39,7 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
     this.getDivision();
-    this.poolTableObservable = this.poolTableService.getPoolTable();
+    this.poolTableObservable = this.poolTableService.getPoolTableNormal();
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;

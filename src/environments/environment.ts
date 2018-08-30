@@ -5,6 +5,10 @@
 export const environment = {
   production: false,
   url: "http://localhost:8090/pooltable",
+  endpoints: [
+    "/topic/pooltable",
+    "/topic/projector"
+  ],
   fps: 2    // częstość odświeżania podświetleń bil i liń podziału
 };
 

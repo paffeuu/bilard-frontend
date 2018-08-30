@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import {PaperScope, Point, Project, Raster} from 'paper';
@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
   templateUrl: './projector.component.html',
   styleUrls: ['./projector.component.css']
 })
-export class ProjectorComponent implements OnInit {
+export class ProjectorComponent implements OnInit, AfterViewInit, OnDestroy {
   width: number;
   height: number;
   scale: number;
@@ -25,11 +25,13 @@ export class ProjectorComponent implements OnInit {
   poolTableObservable: Observable<any>;
   poolTableObserver: any;
 
+  enterPressListener: EventListener;
+
   constructor(private dataService: DataService, private poolTableService: PoolTableService,
               private router: Router) {}
 
   ngOnInit() {
-    this.poolTableObservable = this.poolTableService.getPoolTable();
+    this.poolTableObservable = this.poolTableService.getPoolTableProjector();
   }
 
   @ViewChild('poolTableView') poolTableView: ElementRef;
@@ -44,15 +46,12 @@ export class ProjectorComponent implements OnInit {
     this.initializePoolTableSubject();
     this.initalizeCanvas();
 
-    window.addEventListener("keypress", evt => {
-      if (evt.keyCode == 13) {
+    this.enterPressListener = (event) => {
+      if ((<KeyboardEvent>event).keyCode == 13) {
         this.router.navigate(['']);
       }
-    });
-  }
-
-  ngOnDestroy() {
-
+    };
+    window.addEventListener("keypress", this.enterPressListener);
   }
 
   initializeViewSize(): void {
@@ -92,5 +91,9 @@ export class ProjectorComponent implements OnInit {
         (poolTableObject) =>
           that.poolTableObserver.next(poolTableObject));
     };
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener("keypress", this.enterPressListener);
   }
 }
