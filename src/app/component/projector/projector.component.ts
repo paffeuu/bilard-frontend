@@ -6,6 +6,7 @@ import {tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
+import {properties, PropertiesService} from "../../shared/service/properties.service";
 
 @Component({
   selector: 'app-table',
@@ -25,10 +26,10 @@ export class ProjectorComponent implements OnInit, AfterViewInit, OnDestroy {
   poolTableObservable: Observable<any>;
   poolTableObserver: any;
 
-  enterPressListener: EventListener;
+  keyPressListener: EventListener;
 
   constructor(private dataService: DataService, private poolTableService: PoolTableService,
-              private router: Router) {}
+              private propertiesService: PropertiesService, private router: Router) {}
 
   ngOnInit() {
     this.poolTableObservable = this.poolTableService.getPoolTableProjector();
@@ -46,12 +47,16 @@ export class ProjectorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializePoolTableSubject();
     this.initalizeCanvas();
 
-    this.enterPressListener = (event) => {
+    this.keyPressListener = (event) => {
       if ((<KeyboardEvent>event).keyCode == 13) {
         this.router.navigate(['']);
       }
+      if ((<KeyboardEvent>event).key == 'd') {
+        this.propertiesService.setDebugActive(!properties.debugActive);
+      }
     };
-    window.addEventListener("keypress", this.enterPressListener);
+
+    window.addEventListener("keypress", this.keyPressListener);
   }
 
   initializeViewSize(): void {
@@ -68,8 +73,7 @@ export class ProjectorComponent implements OnInit, AfterViewInit, OnDestroy {
   initializePoolTableSubject(): void {
     this.poolTableObserver = {
       next: (poolTableObject) => {
-        if (poolTableObject)
-        {
+        if (poolTableObject) {
           this.image.src = "data:image/jpg;base64," + poolTableObject.tableImage;
         }
       }
@@ -94,6 +98,6 @@ export class ProjectorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.removeEventListener("keypress", this.enterPressListener);
+    window.removeEventListener("keypress", this.keyPressListener);
   }
 }

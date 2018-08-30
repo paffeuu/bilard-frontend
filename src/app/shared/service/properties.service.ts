@@ -20,7 +20,6 @@ export class PropertiesService {
         response => properties = response,
         error => console.log(error)
       );
-    console.log(properties);
   }
 
   setShowPreviousPosition(showPrevPos: boolean) {

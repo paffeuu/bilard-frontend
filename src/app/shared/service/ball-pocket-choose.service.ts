@@ -10,9 +10,10 @@ import {PropertiesService} from "./properties.service";
 })
 export class BallPocketChooseService {
 
-  private lastClickedCueBallSubject = new Subject<BallModel>();
-  private drawPocketsSubject = new Subject<any>();
-  private lastClickedPocketSubject = new Subject<number>();
+  modeOn: boolean = false;
+  lastClickedCueBallSubject = new Subject<BallModel>();
+  drawPocketsSubject = new Subject<any>();
+  lastClickedPocketSubject = new Subject<number>();
   ballSubscription: Subscription;
   pocketSubscription: Subscription;
   userBallPocket: any = {};
@@ -35,18 +36,19 @@ export class BallPocketChooseService {
     this.lastClickedPocketSubject.next(pocket);
   }
 
+  setMode(mode) {
+    this.modeOn = mode;
+  }
 
   setBall() {
-    console.log("zaczynamy");
     this.setLastClickedCueBall(null);
     let that = this;
     let observer = {
       next: (ball) => {
-        if (ball != null) {
+        if (this.modeOn && ball != null) {
+          that.ballSubscription.unsubscribe();
           that.userBallPocket.ball = ball;
-          console.log("ball = " + ball.x + " " + ball.y);
           that.setPocket();
-          this.ballSubscription.unsubscribe();
         }
       }
     };
@@ -54,19 +56,20 @@ export class BallPocketChooseService {
   }
 
   setPocket() {
-    console.log("elo mordo");
     this.setLastClickedPocket(-1);
     this.setDrawPockets(true);
     let that = this;
     let observer = {
       next: (pocket) => {
-        if (pocket != -1) {
+        if (this.modeOn && pocket != -1) {
+          that.pocketSubscription.unsubscribe();
           that.userBallPocket.pocket = pocket;
-          console.log("pocket: " + pocket);
           that.sendToServer();
           that.propertiesService.setGameMode(1);
-          this.pocketSubscription.unsubscribe();
           that.setDrawPockets(false);
+          if (this.modeOn) {
+            this.setBall();
+          }
         }
       }
     };
@@ -79,10 +82,7 @@ export class BallPocketChooseService {
   }
 
   sendToServer(): void {
-    this.http.put(`${environment.url}/ball-and-pocket`, this.userBallPocket)
-      .subscribe(
-        response => console.log(response),
-        error => console.log(error)
-      );
+    this.http.put(`${environment.url}/ball-and-pocket`, this.userBallPocket).subscribe(
+      () => {}, error => console.log(error));
   }
 }

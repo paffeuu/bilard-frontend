@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Item, Path, Point, Project, PaperScope} from 'paper';
 import {ballsConfig, environment, pocketConfig, tableConfig} from "../../../../environments/environment";
 import {BallModel} from "../../../shared/model/ball.model";
@@ -9,12 +9,24 @@ import {BallPocketChooseService} from "../../../shared/service/ball-pocket-choos
   templateUrl: './cue-balls.component.html',
   styleUrls: ['./cue-balls.component.css']
 })
-export class CueBallsComponent implements OnInit {
+export class CueBallsComponent implements OnInit, OnChanges {
+
+  width: number;
+  height: number;
+  scale: number;
+  project: Project;
+
+  @Input()
+  cueBalls: BallModel[];
+  @Input()
+  ballsHighlight: number;
+  @Input()
+  scope: PaperScope;
 
   constructor(private ballPocketChooseService: BallPocketChooseService) {
     setInterval(() => {
       this.refreshComponent();
-    }, 1000 / environment.fps);
+    }, 1000 / environment.refreshFrequency);
   }
 
   ngOnInit() {
@@ -26,40 +38,28 @@ export class CueBallsComponent implements OnInit {
   }
 
   initializeViewSize(): void {
-    this.width = this.scope.view.viewSize.width;
-    this.height = this.width * (tableConfig.height / tableConfig.width);
-    this.scale = this.width / tableConfig.width;
+    if (this.scope) {
+      this.project = this.scope.project;
+      this.width = this.scope.view.viewSize.width;
+      this.height = this.width * (tableConfig.height / tableConfig.width);
+      this.scale = this.width / tableConfig.width;
+    }
   }
 
   initializeObservablePocketDrawing(): void {
     let drawPocketsObservable = this.ballPocketChooseService.getDrawPockets();
+    let that = this;
     let drawPocketsObserver = {
       next: (draw) => {
-        console.log("draw" + draw);
         if (draw) {
-          console.log("rysuje kurwaaaaaaaaaaaaaaaaaa");
-          this.drawPockets();
+          that.drawPockets();
         } else {
-          console.log(" nie rysuje i chuj");
-          this.removePockets();
+          that.removePockets();
         }
       }
     };
     drawPocketsObservable.subscribe(drawPocketsObserver);
   }
-
-  width: number;
-  height: number;
-  scale: number;
-
-  @Input()
-  project: Project;
-  @Input()
-  cueBalls: BallModel[];
-  @Input()
-  ballsHighlight: number;
-  @Input()
-  scope: PaperScope;
 
   refreshComponent() {
     this.drawCueBalls();

@@ -9,7 +9,7 @@ export const environment = {
     "/topic/pooltable",
     "/topic/projector"
   ],
-  fps: 2    // częstość odświeżania podświetleń bil i liń podziału
+  refreshFrequency: 2    // częstość odświeżania podświetleń bil i liń podziału
 };
 
 export const tableConfig = {

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import {DataService} from "../../../shared/service/data.service";
 import {properties, PropertiesService} from "../../../shared/service/properties.service";
 import {BallPocketChooseService} from "../../../shared/service/ball-pocket-choose.service";
+import {environment} from "../../../../environments/environment";
 
 const gameModes: string[] = ["live", "wybór bili", "shadow ball"];
 
@@ -10,7 +11,7 @@ const gameModes: string[] = ["live", "wybór bili", "shadow ball"];
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.css']
 })
-export class LeftMenuComponent implements OnInit {
+export class LeftMenuComponent {
   division: number = 0;
   showPrevPos: boolean = false;
   gameMode: number = 0;
@@ -22,9 +23,6 @@ export class LeftMenuComponent implements OnInit {
     this.refreshProperties();
   }
 
-  ngOnInit() {
-  }
-
   refreshProperties(): void {
     this.propertiesService.sendAllProperties();
     let that = this;
@@ -32,7 +30,7 @@ export class LeftMenuComponent implements OnInit {
       that.showPrevPos = properties.showPrevPos;
       that.gameMode = properties.gameMode;
       that.debugActive = properties.debugActive;
-    }, 500);
+    }, environment.refreshFrequency);
   }
 
   getGameModeName(): string {
@@ -48,11 +46,13 @@ export class LeftMenuComponent implements OnInit {
   }
 
   sendGameModeToProperties(): void {
-    if (this.gameMode == 1) {
-      this.ballPocketChooseService.setBall();
-    } else {
+    if (this.gameMode == 0) {
+      this.ballPocketChooseService.setMode(false);
       this.propertiesService.setGameMode(this.gameMode);
       this.ballPocketChooseService.setBallAndPocketUndefined();
+    } else {
+      this.ballPocketChooseService.setMode(true);
+      this.ballPocketChooseService.setBall();
     }
   }
 

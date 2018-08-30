@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {DataService} from "../../shared/service/data.service";
 import {PaperScope, Point, Project, Raster, Group} from 'paper';
@@ -6,14 +6,21 @@ import {environment, tableConfig} from "../../../environments/environment";
 import {PoolTableService} from "../../shared/service/pool.table.service";
 import {BallModel} from "../../shared/model/ball.model";
 import {Observable} from "rxjs";
-import {properties} from "../../shared/service/properties.service";
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, AfterViewInit {
+
+  constructor(private dataService: DataService, private poolTableService: PoolTableService,
+              private changeDetectorRef: ChangeDetectorRef) {
+    setInterval(() => {
+      this.refreshComponent();
+    }, 1000 / environment.refreshFrequency);
+  }
+
   width: number;
   height: number;
   scale: number;
@@ -30,32 +37,25 @@ export class TableComponent implements OnInit {
   poolTableObservable: Observable<any>;
   poolTableObserver: any;
 
-  constructor(private dataService: DataService, private poolTableService: PoolTableService) {
-    setInterval(() => {
-      this.refreshComponent();
-    }, 1000 / environment.fps);
-    console.log(properties);
-  }
+  @ViewChild('poolTableView')
+  poolTableView: ElementRef;
 
   ngOnInit() {
     this.getDivision();
     this.poolTableObservable = this.poolTableService.getPoolTableNormal();
   }
 
-  @ViewChild('poolTableView') poolTableView: ElementRef;
-
   ngAfterViewInit(): void {
-
     this.image = new Image();
     this.scope = new PaperScope();
     this.project = new Project(this.poolTableView.nativeElement);
+    this.changeDetectorRef.detectChanges();
 
     this.initializeViewSize();
     this.initializePoolTableSubject();
     this.initalizeCanvas();
     this.refreshComponent();
   }
-
 
   initializeViewSize(): void {
     this.width = this.scope.view.viewSize.width;
@@ -67,17 +67,10 @@ export class TableComponent implements OnInit {
   initalizeCanvas(): void {
     this.initializeRaster();
 
-    let solids = new Group();     // bile "całe"
-    solids.name = "solids";
-
-    let stripes = new Group();    // bile "połówki"
-    stripes.name = "stripes";
-
-    let lines = new Group();
-    lines.name = "lines";
-
-    let pockets = new Group();
-    pockets.name = "pockets";
+    new Group({name: "solids"});     // bile "całe"
+    new Group({name: "stripes"});    // bile "połówki"
+    new Group({name: "lines"});
+    new Group({name: "pockets"});
   }
 
   initializePoolTableSubject(): void {
@@ -94,7 +87,6 @@ export class TableComponent implements OnInit {
   }
 
   initializeRaster(): void {
-
     let raster = new Raster({
       image: this.image,
       name: "raster",

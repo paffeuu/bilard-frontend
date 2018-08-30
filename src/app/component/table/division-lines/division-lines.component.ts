@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Path, Point, Project, PaperScope} from 'paper';
 import {environment, linesConfig, tableConfig} from "../../../../environments/environment";
 
@@ -7,13 +7,12 @@ import {environment, linesConfig, tableConfig} from "../../../../environments/en
   templateUrl: './division-lines.component.html',
   styleUrls: ['./division-lines.component.css']
 })
-export class DivisionLinesComponent implements OnInit {
+export class DivisionLinesComponent implements OnInit, OnChanges {
 
   width: number;
   height: number;
-
-  @Input()
   project: Project;
+
   @Input()
   scope: PaperScope;
   @Input()
@@ -24,7 +23,7 @@ export class DivisionLinesComponent implements OnInit {
   constructor() {
     setInterval(() => {
       this.refreshComponent();
-    }, 1000 / environment.fps);
+    }, 1000 / environment.refreshFrequency);
   }
 
   ngOnInit() {
@@ -35,9 +34,12 @@ export class DivisionLinesComponent implements OnInit {
   }
 
   initializeViewSize(): void {
-    this.width = this.scope.view.viewSize.width;
-    this.height = this.width * (tableConfig.height / tableConfig.width);
-    this.scale = this.width / tableConfig.width;
+    if (this.scope) {
+      this.project = this.scope.project;
+      this.width = this.scope.view.viewSize.width;
+      this.height = this.width * (tableConfig.height / tableConfig.width);
+      this.scale = this.width / tableConfig.width;
+    }
   }
 
   refreshComponent() {
