@@ -42,8 +42,7 @@ export class BallPocketChooseService {
     let observer = {
       next: (ball) => {
         if (ball != null) {
-          that.userBallPocket.x = ball.x;
-          that.userBallPocket.y = ball.y;
+          that.userBallPocket.ball = ball;
           console.log("ball = " + ball.x + " " + ball.y);
           that.setPocket();
           this.ballSubscription.unsubscribe();
