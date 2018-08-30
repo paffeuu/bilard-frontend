@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from "../../../shared/service/data.service";
-import {PropertiesService} from "../../../shared/service/properties.service";
+import {properties, PropertiesService} from "../../../shared/service/properties.service";
 import {BallPocketChooseService} from "../../../shared/service/ball-pocket-choose.service";
 
 const gameModes: string[] = ["live", "wybór bili", "shadow ball"];
@@ -18,10 +18,20 @@ export class LeftMenuComponent implements OnInit {
 
   constructor(private dataService: DataService, private propertiesService: PropertiesService,
               private ballPocketChooseService: BallPocketChooseService) {
-    this.sendShowPrevPositionToProperties();
+    this.refreshProperties();
   }
 
   ngOnInit() {
+  }
+
+  refreshProperties(): void {
+    this.propertiesService.sendAllProperties();
+    let that = this;
+    setTimeout(function() {
+      that.showPrevPos = properties.showPrevPos;
+      that.gameMode = properties.gameMode;
+      that.debugActive = properties.debugActive;
+    }, 500);
   }
 
   getGameModeName(): string {
