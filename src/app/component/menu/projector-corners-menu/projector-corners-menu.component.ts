@@ -2,18 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import {properties, PropertiesService} from "../../../shared/service/properties.service";
 
 @Component({
-  selector: 'app-projector-config',
-  templateUrl: './projector-config.component.html',
-  styleUrls: ['./projector-config.component.css']
+  selector: 'app-projector-corners-menu',
+  templateUrl: './projector-corners-menu.component.html',
+  styleUrls: [
+    './projector-corners-menu.component.css',
+    '.././menu.module.css']
 })
-export class ProjectorConfigComponent implements OnInit {
+export class ProjectorCornersMenuComponent implements OnInit {
 
   constructor(private propertiesService: PropertiesService) { }
 
-  projectorLeftTopCorner: any;
-  projectorRightTopCorner: any;
-  projectorRightBottomCorner: any;
-  projectorLeftBottomCorner: any;
+  projectorLeftTopCorner: any = ProjectorCornersMenuComponent.Point();
+  projectorRightTopCorner: any = ProjectorCornersMenuComponent.Point();
+  projectorRightBottomCorner: any = ProjectorCornersMenuComponent.Point();
+  projectorLeftBottomCorner: any = ProjectorCornersMenuComponent.Point();
 
   ngOnInit() {
     this.refreshProperties();
@@ -45,4 +47,8 @@ export class ProjectorConfigComponent implements OnInit {
     this.propertiesService.setProjectorLeftBottomCorner(this.projectorLeftBottomCorner);
   }
 
+  static Point() {
+    return {x: 0, y: 0};
+  }
 }
+

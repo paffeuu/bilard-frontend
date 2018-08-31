@@ -6,19 +6,6 @@ p-slider {
   display: block;
 }
 
-.menu-component {
-  font-weight: bold;
-  background-color: #0d707a;
-  border: 2px solid #0c505a;
-  padding: 10px;
-}
-.menu-component .menu-component-title {
-  font-size: 18px;
-  border-bottom: 1px dotted gray;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-}
-
 #game-mode-name
 {
   color: yellow;

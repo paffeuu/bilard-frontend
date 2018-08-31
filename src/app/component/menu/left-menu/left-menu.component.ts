@@ -8,7 +8,9 @@ const gameModes: string[] = ["live", "wybór bili", "shadow ball"];
 @Component({
   selector: 'app-left-menu',
   templateUrl: './left-menu.component.html',
-  styleUrls: ['./left-menu.component.css']
+  styleUrls: [
+    './left-menu.component.css',
+    '.././menu.module.css']
 })
 export class LeftMenuComponent {
   division: number = 0;
@@ -28,7 +30,7 @@ export class LeftMenuComponent {
       that.showPrevPos = properties.showPrevPos;
       that.gameMode = properties.gameMode;
       that.debugActive = properties.debugActive;
-    }, 200);
+    }, 500);
   }
 
   getGameModeName(): string {
@@ -46,13 +48,12 @@ export class LeftMenuComponent {
   sendGameModeToProperties(): void {
     if (this.gameMode == 0) {
       this.ballPocketChooseService.setMode(false);
-      this.propertiesService.setGameMode(this.gameMode);
       this.ballPocketChooseService.setBallAndPocketUndefined();
     } else {
-      // TO-DO  nie da się zmienić trybu z 1 na 2 (ten sam się wysyła do propertiesów)
       this.ballPocketChooseService.setMode(true);
-      this.ballPocketChooseService.setBall(this.gameMode);
+      this.ballPocketChooseService.setBall();
     }
+    this.propertiesService.setGameMode(this.gameMode);
   }
 
   sendDebugActiveToProperties(): void {

@@ -3,7 +3,6 @@ import {BallModel} from "../model/ball.model";
 import {Subject, Subscription} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {PropertiesService} from "./properties.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class BallPocketChooseService {
   pocketSubscription: Subscription;
   userBallPocket: any = {};
 
-  constructor(private http: HttpClient, private propertiesService: PropertiesService) { }
+  constructor(private http: HttpClient) { }
 
   setLastClickedCueBall(ball: BallModel): void {
     this.lastClickedCueBallSubject.next(ball);
@@ -40,7 +39,7 @@ export class BallPocketChooseService {
     this.modeOn = mode;
   }
 
-  setBall(gameMode) {
+  setBall() {
     this.setLastClickedCueBall(null);
     let that = this;
     let observer = {
@@ -48,14 +47,14 @@ export class BallPocketChooseService {
         if (this.modeOn && ball != null) {
           that.ballSubscription.unsubscribe();
           that.userBallPocket.ball = ball;
-          that.setPocket(gameMode);
+          that.setPocket();
         }
       }
     };
     this.ballSubscription = this.lastClickedCueBallSubject.asObservable().subscribe(observer);
   }
 
-  setPocket(gameMode) {
+  setPocket() {
     this.setLastClickedPocket(-1);
     this.setDrawPockets(true);
     let that = this;
@@ -65,10 +64,9 @@ export class BallPocketChooseService {
           that.pocketSubscription.unsubscribe();
           that.userBallPocket.pocket = pocket;
           that.sendToServer();
-          that.propertiesService.setGameMode(gameMode);
           that.setDrawPockets(false);
           if (this.modeOn) {
-            this.setBall(gameMode);
+            this.setBall();
           }
         }
       }

@@ -5,7 +5,8 @@ import {SliderModule} from "primeng/slider";
 import {FormsModule} from "@angular/forms";
 import {ButtonModule, RadioButtonModule, InputSwitchModule, SpinnerModule} from "primeng/primeng";
 import {AppRoutingModule} from "../../app-routing.module";
-import { ProjectorConfigComponent } from './projector-config/projector-config.component';
+import { ProjectorCornersMenuComponent } from './projector-corners-menu/projector-corners-menu.component';
+import { ProjectorConfigMenuComponent } from './projector-config-menu/projector-config-menu.component';
 
 @NgModule({
   imports: [
@@ -20,11 +21,13 @@ import { ProjectorConfigComponent } from './projector-config/projector-config.co
   ],
   declarations: [
     LeftMenuComponent,
-    ProjectorConfigComponent
+    ProjectorCornersMenuComponent,
+    ProjectorConfigMenuComponent
   ],
   exports: [
     LeftMenuComponent,
-    ProjectorConfigComponent
+    ProjectorCornersMenuComponent,
+    ProjectorConfigMenuComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

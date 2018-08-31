@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 export class NormalViewComponent implements OnInit, OnDestroy {
 
   enterPressListener: EventListener;
-  configMode: boolean = false;
+  configMode: number = 0;
 
   constructor(private router: Router) { }
 
@@ -19,7 +19,7 @@ export class NormalViewComponent implements OnInit, OnDestroy {
         this.router.navigate(['projector']);
       }
       if ((<KeyboardEvent>event).key == 'c') {
-        this.configMode = !this.configMode;
+        this.configMode = (this.configMode + 1) % 3;
       }
     };
     window.addEventListener("keypress", this.enterPressListener);
