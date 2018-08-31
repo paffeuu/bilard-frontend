@@ -63,71 +63,51 @@ export class CueBallsComponent implements OnInit, OnChanges {
 
   refreshComponent() {
     this.drawCueBalls();
-    this.highlightCueBalls();
   }
 
   drawCueBalls(): void {
-    let solids = this.project.activeLayer.children["solids"];     // bile "całe"
-    solids.removeChildren();
-    let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
-    stripes.removeChildren();
+    let balls = this.project.activeLayer.children["balls"];     // bile "całe"
+    balls.removeChildren();
+    let whiteBall = this.project.activeLayer.children["whiteBall"];
+    if (whiteBall) {
+      whiteBall.remove();
+    }
     let that = this;
     if (!this.cueBalls) return;
     this.cueBalls.forEach((ball) => {
       let circle = new Path.Circle(
         new Point(ball.x * this.scale, ball.y * this.scale),
         ballsConfig.radius * this.scale);
-      circle.onClick = function () {
-        that.ballPocketChooseService.setLastClickedCueBall(ball);
-        let hoop = new Path.Circle(circle.position, ballsConfig.hoopRadius);  // obręcz wybranej bili
-        hoop.strokeColor = "black";
-        hoop.strokeWidth = 5;
-        setTimeout(function() {
-          hoop.remove();
-        }, 3000);
-      };
-      if (ball.id >= 10 && ball.id <= 29) { // warunek dla "całych"
-        solids.addChild(circle);
+      if (ball.id > 0) {
+        balls.addChild(circle);
         circle.onMouseMove = function() {
-          let solids = that.project.activeLayer.children["solids"];
-          solids.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
+          CueBallsComponent.setCircleHighlighted(circle, ballsConfig.color);
         };
         circle.onMouseLeave = function () {
-          solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
+          CueBallsComponent.setCircleUnhighlighted(circle);
         };
-      } else if (ball.id >= 30) {          // warunek dla "połówek"
-        stripes.addChild(circle);
+      } else if (ball.id == 0) {          // warunek dla "połówek"
+        circle.name = "whiteBall";
         circle.onMouseMove = function () {
-          stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
+          CueBallsComponent.setCircleHighlighted(circle, ballsConfig.whiteColor);
         };
         circle.onMouseLeave = function () {
-          stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
+          CueBallsComponent.setCircleUnhighlighted(circle);
         };
-      } else {
-        circle.remove();
       }
+      circle.onClick = function () {
+        if (circle.name != "whiteBall") {
+          that.ballPocketChooseService.setLastClickedCueBall(ball);
+          let hoop = new Path.Circle(circle.position, ballsConfig.hoopRadius);  // obręcz wybranej bili
+          hoop.strokeColor = ballsConfig.hoopStrokeColor;
+          hoop.strokeWidth = ballsConfig.hoopStrokeWidth;
+          setTimeout(function() {
+            hoop.remove();
+          }, 3000);
+        }
+      };
       CueBallsComponent.setCircleUnhighlighted(circle);
     })
-  }
-
-  highlightCueBalls() {
-    let solids = this.project.activeLayer.children["solids"];     // bile "całe"
-    let stripes = this.project.activeLayer.children["stripes"];    // bile "połówki"
-    switch (this.ballsHighlight)
-    {
-      case 0:
-        solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
-        stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
-        break;
-      case 1:
-        solids.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.solidsColor));
-        stripes.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
-        break;
-      case 2:
-        solids.children.forEach((circle) => CueBallsComponent.setCircleUnhighlighted(circle));
-        stripes.children.forEach((circle) => CueBallsComponent.setCircleHighlighted(circle, ballsConfig.stripesColor));
-        break;
-    }
   }
 
   static setCircleHighlighted(circle: Item, color: string) {
@@ -145,16 +125,15 @@ export class CueBallsComponent implements OnInit, OnChanges {
     let that = this;
     pocketConfig.pocketModel.forEach((pocket) => {
       let pocketCircle = new Path.Circle(new Point(pocket.centerX * this.scale, pocket.centerY * this.scale), pocketConfig.hoopRadius);
-      pocketCircle.strokeWidth = 5;
-      pocketCircle.strokeColor = "black";
-      pocketCircle.fillColor = "yellow";
-      pocketCircle.opacity = 0.1;
+      pocketCircle.strokeWidth = pocketConfig.hoopStrokeWidth;
+      pocketCircle.strokeColor = pocketConfig.hoopStrokeColor;
+      pocketCircle.fillColor = pocketConfig.hoopFillColor;
+      pocketCircle.opacity = pocketConfig.hoopOpacity;
       pockets.addChild(pocketCircle);
       pocketCircle.onClick = function () {
         that.ballPocketChooseService.setLastClickedPocket(pocket.id);
       }
     });
-
   }
 
   removePockets(): void {

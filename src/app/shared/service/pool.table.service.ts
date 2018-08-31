@@ -8,7 +8,7 @@ import {environment} from "../../../environments/environment";
   providedIn: 'root'
 })
 export class PoolTableService {
-  private serverUrl = 'http://localhost:8090/socket';
+  private serverUrl = environment.socketUrl;
   private stompClient;
 
   private readonly poolTableNormalSubject: Subject<any>;

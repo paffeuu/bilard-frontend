@@ -14,10 +14,8 @@ const gameModes: string[] = ["live", "wybór bili", "shadow ball"];
 })
 export class LeftMenuComponent {
   division: number = 0;
-  showPrevPos: boolean = false;
   gameMode: number = 0;
   debugActive: boolean = false;
-  highlight: number = 0;
 
   constructor(private dataService: DataService, private propertiesService: PropertiesService,
               private ballPocketChooseService: BallPocketChooseService) {
@@ -27,7 +25,6 @@ export class LeftMenuComponent {
   refreshProperties(): void {
     let that = this;
     setTimeout(function() {
-      that.showPrevPos = properties.showPrevPos;
       that.gameMode = properties.gameMode;
       that.debugActive = properties.debugActive;
     }, 500);
@@ -39,10 +36,6 @@ export class LeftMenuComponent {
 
   sendDivisionToService(): void {
     this.dataService.setDivisionLines(this.division);
-  }
-
-  sendShowPrevPositionToProperties(): void {
-    this.propertiesService.setShowPreviousPosition(this.showPrevPos);
   }
 
   sendGameModeToProperties(): void {
@@ -58,9 +51,5 @@ export class LeftMenuComponent {
 
   sendDebugActiveToProperties(): void {
     this.propertiesService.setDebugActive(this.debugActive);
-  }
-
-  sendHighlightToService(): void {
-    this.dataService.setCueBallsHighlight(this.highlight);
   }
 }

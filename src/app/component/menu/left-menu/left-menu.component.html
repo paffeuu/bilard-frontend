@@ -23,17 +23,6 @@
   </div>
 </div>
 <div class="menu-component">
-  <div class="menu-component-title">
-    Poprzednia pozycja bil
-  </div>
-  <div class="ui-g" style="width:250px;margin-bottom:10px">
-    <div class="ui-g-3"></div>
-    <div class="ui-g-2">
-      <p-inputSwitch [(ngModel)]="showPrevPos" (onChange)="sendShowPrevPositionToProperties()" class="inputswitch"></p-inputSwitch>
-    </div>
-  </div>
-</div>
-<div class="menu-component">
   <button routerLink="projector" class="ui-button-danger projector-button">Tryb projektora</button>
 </div>
 <div class="menu-component">
@@ -44,22 +33,6 @@
     <div class="ui-g-3"></div>
     <div class="ui-g-2">
       <p-inputSwitch [(ngModel)]="debugActive" (onChange)="sendDebugActiveToProperties()" class="inputswitch"></p-inputSwitch>
-    </div>
-  </div>
-</div>
-<div class="menu-component">
-  <div class="menu-component-title">
-    Wyświetl bile
-  </div>
-  <div class="ui-g" style="width:250px;margin-bottom:10px">
-    <div class="ui-g-12">
-      <p-radioButton name="group2" value="0" label="brak" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
-    </div>
-    <div class="ui-g-12">
-      <p-radioButton name="group2" value="1" label="całe" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
-    </div>
-    <div class="ui-g-12">
-      <p-radioButton name="group2" value="2" label="połówki" [(ngModel)]="highlight" (click)="sendHighlightToService()"></p-radioButton>
     </div>
   </div>
 </div>

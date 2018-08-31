@@ -23,11 +23,6 @@ export class PropertiesService {
       );
   }
 
-  setShowPreviousPosition(showPrevPos: boolean) {
-    properties.showPreviousPosition = showPrevPos;
-    this.sendAllProperties();
-  }
-
   setDebugActive(debugActive: boolean) {
     properties.debugActive = debugActive;
     this.sendAllProperties();

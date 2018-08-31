@@ -67,8 +67,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   initalizeCanvas(): void {
     this.initializeRaster();
 
-    new Group({name: "solids"});     // bile "całe"
-    new Group({name: "stripes"});    // bile "połówki"
+    new Group({name: "balls"});
     new Group({name: "lines"});
     new Group({name: "pockets"});
   }
@@ -103,7 +102,6 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   refreshComponent(): void {
     this.getDivision();
-    this.getHighlight();
   }
 
   getDivision(): void {
@@ -114,15 +112,5 @@ export class TableComponent implements OnInit, AfterViewInit {
       }, error => {
         console.error(error);
       });
-  }
-
-  getHighlight(): void {
-    this.dataService
-      .getCueBallsHighlight()
-      .subscribe(response => {
-        this.ballsHighlight = parseInt(response.highlight);
-      }, error => {
-      console.error(error);
-    });
   }
 }

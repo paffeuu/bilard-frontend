@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   url: "http://localhost:8090/pooltable",
+  socketUrl: "http://localhost:8090/socket",
   endpoints: [
     "/topic/pooltable",
     "/topic/projector"
@@ -19,9 +20,11 @@ export const tableConfig = {
 
 export const ballsConfig = {
   radius: 13,
-  hoopRadius: 20,
-  solidsColor: "#ff0000",
-  stripesColor: "#00ff00"
+  hoopRadius: 22,
+  hoopStrokeColor: "black",
+  hoopStrokeWidth: 6,
+  whiteColor: "white",
+  color: "#00ff00"
 };
 
 export const linesConfig = {
@@ -37,7 +40,11 @@ export const pocketConfig = {
     {centerX: 639.5, centerY: 630.0, id: 4},
     {centerX: 148.0, centerY: 630.0, id: 5},
   ],
-  hoopRadius: 30
+  hoopRadius: 30,
+  hoopFillColor: "yellow",
+  hoopOpacity: 0.3,
+  hoopStrokeColor: "blue",
+  hoopStrokeWidth: 5
 };
 
 /*
