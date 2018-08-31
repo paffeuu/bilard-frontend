@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {properties, PropertiesService} from "../../../shared/service/properties.service";
+import {PointModel} from "../../../shared/model/point.model";
 
 @Component({
   selector: 'app-projector-corners-menu',
@@ -12,10 +13,10 @@ export class ProjectorCornersMenuComponent implements OnInit {
 
   constructor(private propertiesService: PropertiesService) { }
 
-  projectorLeftTopCorner: any = ProjectorCornersMenuComponent.Point();
-  projectorRightTopCorner: any = ProjectorCornersMenuComponent.Point();
-  projectorRightBottomCorner: any = ProjectorCornersMenuComponent.Point();
-  projectorLeftBottomCorner: any = ProjectorCornersMenuComponent.Point();
+  projectorLeftTopCorner: any = new PointModel();
+  projectorRightTopCorner: any = new PointModel();
+  projectorRightBottomCorner: any = new PointModel();
+  projectorLeftBottomCorner: any = new PointModel();
 
   ngOnInit() {
     this.refreshProperties();
@@ -24,11 +25,19 @@ export class ProjectorCornersMenuComponent implements OnInit {
   refreshProperties(): void {
     let that = this;
     setTimeout(function() {
-      that.projectorLeftTopCorner = properties.projectorLeftTopCorner;
-      that.projectorRightTopCorner = properties.projectorRightTopCorner;
-      that.projectorRightBottomCorner = properties.projectorRightBottomCorner;
-      that.projectorLeftBottomCorner = properties.projectorLeftBottomCorner;
-    }, 200);
+      if (properties.projectorLeftTopCorner) {
+        that.projectorLeftTopCorner = properties.projectorLeftTopCorner;
+      }
+      if (properties.projectorRightTopCorner) {
+        that.projectorRightTopCorner = properties.projectorRightTopCorner;
+      }
+      if (properties.projectorRightBottomCorner) {
+        that.projectorRightBottomCorner = properties.projectorRightBottomCorner;
+      }
+      if (properties.projectorLeftBottomCorner) {
+        that.projectorLeftBottomCorner = properties.projectorLeftBottomCorner;
+      }
+    }, 400);
   }
 
   sendProjectorLeftTopCornerToProperties(): void {
@@ -46,9 +55,4 @@ export class ProjectorCornersMenuComponent implements OnInit {
   sendProjectorLeftBottomCornerToProperties(): void {
     this.propertiesService.setProjectorLeftBottomCorner(this.projectorLeftBottomCorner);
   }
-
-  static Point() {
-    return {x: 0, y: 0};
-  }
 }
-

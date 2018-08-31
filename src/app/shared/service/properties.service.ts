@@ -17,8 +17,8 @@ export class PropertiesService {
   sendAllProperties() {
     this.http.put(`${environment.url}/set-properties`, properties)
       .subscribe(
-        response => properties = response,
-          //console.log(response),
+        response => {properties = response;
+          console.log(response)},
         error => console.log(error)
       );
   }
@@ -55,6 +55,31 @@ export class PropertiesService {
 
   setProjectorLeftBottomCorner(projectorLeftBottomCorner: number) {
     properties.projectorLeftBottomCorner = projectorLeftBottomCorner;
+    this.sendAllProperties();
+  }
+
+  setLeftTopCorrection(leftTop: number) {
+    properties.leftTopCorrection = leftTop;
+    this.sendAllProperties();
+  }
+
+  setLeftBottomCorrection(leftBottom: number) {
+    properties.leftBottomCorrection = leftBottom;
+    this.sendAllProperties();
+  }
+
+  setRightTopCorrection(rightTop: number) {
+    properties.rightTopCorrection = rightTop;
+    this.sendAllProperties();
+  }
+
+  setRightBottomCorrection(rightBottom: number) {
+    properties.rightBottomCorrection = rightBottom;
+    this.sendAllProperties();
+  }
+
+  setCenterCorrection(center: number) {
+    properties.center = center;
     this.sendAllProperties();
   }
 }
