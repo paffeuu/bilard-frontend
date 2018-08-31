@@ -2,7 +2,6 @@ import { Component} from '@angular/core';
 import {DataService} from "../../../shared/service/data.service";
 import {properties, PropertiesService} from "../../../shared/service/properties.service";
 import {BallPocketChooseService} from "../../../shared/service/ball-pocket-choose.service";
-import {environment} from "../../../../environments/environment";
 
 const gameModes: string[] = ["live", "wybór bili", "shadow ball"];
 
@@ -24,13 +23,12 @@ export class LeftMenuComponent {
   }
 
   refreshProperties(): void {
-    this.propertiesService.sendAllProperties();
     let that = this;
     setTimeout(function() {
       that.showPrevPos = properties.showPrevPos;
       that.gameMode = properties.gameMode;
       that.debugActive = properties.debugActive;
-    }, environment.refreshFrequency);
+    }, 200);
   }
 
   getGameModeName(): string {
@@ -51,8 +49,9 @@ export class LeftMenuComponent {
       this.propertiesService.setGameMode(this.gameMode);
       this.ballPocketChooseService.setBallAndPocketUndefined();
     } else {
+      // TO-DO  nie da się zmienić trybu z 1 na 2 (ten sam się wysyła do propertiesów)
       this.ballPocketChooseService.setMode(true);
-      this.ballPocketChooseService.setBall();
+      this.ballPocketChooseService.setBall(this.gameMode);
     }
   }
 

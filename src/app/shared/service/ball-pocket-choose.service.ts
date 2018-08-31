@@ -40,7 +40,7 @@ export class BallPocketChooseService {
     this.modeOn = mode;
   }
 
-  setBall() {
+  setBall(gameMode) {
     this.setLastClickedCueBall(null);
     let that = this;
     let observer = {
@@ -48,14 +48,14 @@ export class BallPocketChooseService {
         if (this.modeOn && ball != null) {
           that.ballSubscription.unsubscribe();
           that.userBallPocket.ball = ball;
-          that.setPocket();
+          that.setPocket(gameMode);
         }
       }
     };
     this.ballSubscription = this.lastClickedCueBallSubject.asObservable().subscribe(observer);
   }
 
-  setPocket() {
+  setPocket(gameMode) {
     this.setLastClickedPocket(-1);
     this.setDrawPockets(true);
     let that = this;
@@ -65,10 +65,10 @@ export class BallPocketChooseService {
           that.pocketSubscription.unsubscribe();
           that.userBallPocket.pocket = pocket;
           that.sendToServer();
-          that.propertiesService.setGameMode(1);
+          that.propertiesService.setGameMode(gameMode);
           that.setDrawPockets(false);
           if (this.modeOn) {
-            this.setBall();
+            this.setBall(gameMode);
           }
         }
       }
@@ -77,8 +77,12 @@ export class BallPocketChooseService {
   }
 
   setBallAndPocketUndefined(): void {
-    this.ballSubscription.unsubscribe();
-    this.pocketSubscription.unsubscribe();
+    if (this.ballSubscription) {
+      this.ballSubscription.unsubscribe();
+    }
+    if (this.pocketSubscription) {
+      this.pocketSubscription.unsubscribe();
+    }
   }
 
   sendToServer(): void {

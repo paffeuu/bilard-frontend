@@ -1,0 +1,41 @@
+<div class="menu-component">
+  <div class="menu-component-title">
+    Tryb gry
+  </div>
+  <div class="ui-g" style="width:250px;margin-bottom:10px">
+    <div class="ui-g 12">
+      <div class="corner-container">
+        <h4>projectorLeftTopCorner.x</h4>
+        <p-spinner size="10" [(ngModel)]="projectorLeftTopCorner.x" [step]="0.5"
+                   (onChange)="sendProjectorLeftTopCornerToProperties()"></p-spinner>
+        <h4>projectorLeftTopCorner.y</h4>
+        <p-spinner size="10" [(ngModel)]="projectorLeftTopCorner.y" [step]="0.5"
+                   (onChange)="sendProjectorLeftTopCornerToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>projectorRightTopCorner.x</h4>
+        <p-spinner size="10" [(ngModel)]="projectorRightTopCorner.x" [step]="0.5"
+                   (onChange)="sendProjectorRightTopCornerToProperties()"></p-spinner>
+        <h4>projectorRightTopCorner.y</h4>
+        <p-spinner size="10" [(ngModel)]="projectorRightTopCorner.y" [step]="0.5"
+                   (onChange)="sendProjectorRightTopCornerToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>projectorRightBottomCorner.x</h4>
+        <p-spinner size="10" [(ngModel)]="projectorRightBottomCorner.x" [step]="0.5"
+                   (onChange)="sendProjectorRightBottomCornerToProperties()"></p-spinner>
+        <h4>projectorRightBottomCorner.y</h4>
+        <p-spinner size="10" [(ngModel)]="projectorRightBottomCorner.y" [step]="0.5"
+                   (onChange)="sendProjectorRightBottomCornerToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>projectorLeftBottomCorner.x</h4>
+        <p-spinner size="10" [(ngModel)]="projectorLeftBottomCorner.x" [step]="0.5"
+                   (onChange)="sendProjectorLeftBottomCornerToProperties()"></p-spinner>
+        <h4>projectorLeftBottomCorner.y</h4>
+        <p-spinner size="10" [(ngModel)]="projectorLeftBottomCorner.y" [step]="0.5"
+                   (onChange)="sendProjectorLeftBottomCornerToProperties()"></p-spinner>
+      </div>
+    </div>
+  </div>
+</div>

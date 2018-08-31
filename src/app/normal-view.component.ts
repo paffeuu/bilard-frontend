@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 export class NormalViewComponent implements OnInit, OnDestroy {
 
   enterPressListener: EventListener;
+  configMode: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -16,6 +17,9 @@ export class NormalViewComponent implements OnInit, OnDestroy {
     this.enterPressListener = (event) => {
       if ((<KeyboardEvent>event).keyCode == 13) {
         this.router.navigate(['projector']);
+      }
+      if ((<KeyboardEvent>event).key == 'c') {
+        this.configMode = !this.configMode;
       }
     };
     window.addEventListener("keypress", this.enterPressListener);
