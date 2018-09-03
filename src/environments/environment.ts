@@ -19,12 +19,12 @@ export const tableConfig = {
 };
 
 export const ballsConfig = {
-  radius: 13,
+  radius: 17,
   hoopRadius: 22,
-  hoopStrokeColor: "black",
+  hoopStrokeColor: "blue",
   hoopStrokeWidth: 6,
   whiteColor: "white",
-  color: "#00ff00"
+  color: "#000000"
 };
 
 export const linesConfig = {

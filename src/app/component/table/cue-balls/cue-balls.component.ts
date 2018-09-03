@@ -68,17 +68,13 @@ export class CueBallsComponent implements OnInit, OnChanges {
   drawCueBalls(): void {
     let balls = this.project.activeLayer.children["balls"];     // bile "całe"
     balls.removeChildren();
-    let whiteBall = this.project.activeLayer.children["whiteBall"];
-    if (whiteBall) {
-      whiteBall.remove();
-    }
     let that = this;
     if (!this.cueBalls) return;
     this.cueBalls.forEach((ball) => {
-      let circle = new Path.Circle(
-        new Point(ball.x * this.scale, ball.y * this.scale),
-        ballsConfig.radius * this.scale);
-      if (ball.id > 0) {
+      if (ball.id != 0) {
+        let circle = new Path.Circle(
+          new Point(ball.x * this.scale, ball.y * this.scale),
+          ballsConfig.radius * this.scale);
         balls.addChild(circle);
         circle.onMouseMove = function() {
           CueBallsComponent.setCircleHighlighted(circle, ballsConfig.color);
@@ -86,29 +82,21 @@ export class CueBallsComponent implements OnInit, OnChanges {
         circle.onMouseLeave = function () {
           CueBallsComponent.setCircleUnhighlighted(circle);
         };
-      } else if (ball.id == 0) {          // warunek dla "połówek"
-        circle.name = "whiteBall";
-        circle.onMouseMove = function () {
-          CueBallsComponent.setCircleHighlighted(circle, ballsConfig.whiteColor);
+        circle.onClick = function () {
+          if (circle.name != "whiteBall") {
+            that.ballPocketChooseService.setLastClickedCueBall(ball);
+            let hoop = new Path.Circle(circle.position, ballsConfig.hoopRadius);  // obręcz wybranej bili
+            hoop.strokeColor = ballsConfig.hoopStrokeColor;
+            hoop.strokeWidth = ballsConfig.hoopStrokeWidth;
+            setTimeout(function() {
+              hoop.remove();
+            }, 3000);
+          }
         };
-        circle.onMouseLeave = function () {
-          CueBallsComponent.setCircleUnhighlighted(circle);
-        };
+        CueBallsComponent.setCircleUnhighlighted(circle);
       }
-      circle.onClick = function () {
-        if (circle.name != "whiteBall") {
-          that.ballPocketChooseService.setLastClickedCueBall(ball);
-          let hoop = new Path.Circle(circle.position, ballsConfig.hoopRadius);  // obręcz wybranej bili
-          hoop.strokeColor = ballsConfig.hoopStrokeColor;
-          hoop.strokeWidth = ballsConfig.hoopStrokeWidth;
-          setTimeout(function() {
-            hoop.remove();
-          }, 3000);
-        }
-      };
-      CueBallsComponent.setCircleUnhighlighted(circle);
     })
-  }
+  };
 
   static setCircleHighlighted(circle: Item, color: string) {
     circle.fillColor = color;
