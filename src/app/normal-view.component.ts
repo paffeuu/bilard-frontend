@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
-const numberOfModes = 2;
+const numberOfModes = 3;
 
 @Component({
   selector: 'app-normal-view',
