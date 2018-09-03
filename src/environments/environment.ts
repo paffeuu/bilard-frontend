@@ -42,7 +42,7 @@ export const pocketConfig = {
   ],
   hoopRadius: 30,
   hoopFillColor: "yellow",
-  hoopOpacity: 0.3,
+  hoopOpacity: 0.7,
   hoopStrokeColor: "blue",
   hoopStrokeWidth: 5
 };

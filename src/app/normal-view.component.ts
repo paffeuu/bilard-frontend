@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
+const numberOfModes = 2;
+
 @Component({
   selector: 'app-normal-view',
   templateUrl: './normal-view.component.html',
@@ -19,7 +21,7 @@ export class NormalViewComponent implements OnInit, OnDestroy {
         this.router.navigate(['projector']);
       }
       if ((<KeyboardEvent>event).key == 'c') {
-        this.configMode = (this.configMode + 1) % 3;
+        this.configMode = (this.configMode + 1) % numberOfModes;
       }
     };
     window.addEventListener("keypress", this.enterPressListener);
