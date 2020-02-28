@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background-color: black;
+  overflow: hidden;
+}
+
+* {
+  font-family: Bahnschrift, serif;
+  color: white;
+  word-spacing: 0.1em;
+}

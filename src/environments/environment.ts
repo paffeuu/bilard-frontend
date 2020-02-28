@@ -5,7 +5,46 @@
 export const environment = {
   production: false,
   url: "http://localhost:8090/pooltable",
-  fps: 4
+  socketUrl: "http://localhost:8090/socket",
+  endpoints: [
+    "/topic/pooltable",
+    "/topic/projector"
+  ],
+  refreshFrequency: 2    // częstość odświeżania podświetleń bil i liń podziału
+};
+
+export const tableConfig = {
+  width: 1280,  // rozdzielczość zdjęcia z kamery
+  height: 720
+};
+
+export const ballsConfig = {
+  radius: 17,
+  hoopRadius: 22,
+  hoopStrokeColor: "blue",
+  hoopStrokeWidth: 6,
+  whiteColor: "white",
+  color: "#000000"
+};
+
+export const linesConfig = {
+  lineColor: "black"
+};
+
+export const pocketConfig = {
+  pocketModel: [
+    {centerX: 148.0, centerY: 135.0, id: 0},
+    {centerX: 639.5, centerY: 135.0, id: 1},
+    {centerX: 1131.0, centerY: 135.0, id: 2},
+    {centerX: 1131.0, centerY: 630.0, id: 3},
+    {centerX: 639.5, centerY: 630.0, id: 4},
+    {centerX: 148.0, centerY: 630.0, id: 5},
+  ],
+  hoopRadius: 30,
+  hoopFillColor: "yellow",
+  hoopOpacity: 0.7,
+  hoopStrokeColor: "blue",
+  hoopStrokeWidth: 5
 };
 
 /*

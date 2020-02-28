@@ -1,0 +1,38 @@
+<div class="menu-component">
+  <div class="menu-component-title">
+    Tryb gry
+  </div>
+  <div class="ui-g" style="width:250px;margin-bottom:10px">
+    <div class="ui-g 12" id="game-mode">
+      <div id="game-mode-name">{{getGameModeName()}}</div>
+      <p-slider [(ngModel)]="gameMode" [style]="{'width':'5em', 'margin-left':'30%'}" [min]="0" [max]="2" [step]="1"
+                (onSlideEnd)="sendGameModeToProperties()" ></p-slider>
+    </div>
+  </div>
+</div>
+<div class="menu-component">
+  <div class="menu-component-title">
+    Podział stołu
+  </div>
+  <div class="ui-g" style="width:250px;margin-bottom:10px">
+    <div class="ui-g 12">
+      Ilość linii podziału: {{division}}
+      <p-slider [(ngModel)]="division" [style]="{'width':'10em'}" [min]="0" [max]="4" [step]="1"
+                (onChange)="sendDivisionToService()" ></p-slider>
+    </div>
+  </div>
+</div>
+<div class="menu-component">
+  <button routerLink="projector" class="ui-button-danger projector-button">Tryb projektora</button>
+</div>
+<div class="menu-component">
+  <div class="menu-component-title">
+    Debug
+  </div>
+  <div class="ui-g" style="width:250px;margin-bottom:10px">
+    <div class="ui-g-3"></div>
+    <div class="ui-g-2">
+      <p-inputSwitch [(ngModel)]="debugActive" (onChange)="sendDebugActiveToProperties()" class="inputswitch"></p-inputSwitch>
+    </div>
+  </div>
+</div>

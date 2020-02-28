@@ -1,0 +1,10 @@
+* {
+  overflow: hidden;
+  font-family: Bahnschrift, serif;
+  color: white;
+  word-spacing: 0.1em;
+}
+
+.container {
+  background-color: #1295A2;
+}

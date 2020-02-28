@@ -1,0 +1,23 @@
+p-slider {
+  padding-left: 5%;
+}
+
+#game-mode {
+  display: block;
+}
+
+#game-mode-name
+{
+  color: yellow;
+  font-size: 20px;
+  width: auto;
+  margin-bottom: 5px;
+}
+
+.projector-button {
+  padding: 5px;
+  background: red;
+  width: 50%;
+  margin-left: 25%;
+  margin-right: auto;
+}

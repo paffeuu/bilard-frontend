@@ -1,0 +1,49 @@
+<div class="menu-component">
+  <div class="menu-component-title">
+    Konfiguracja przesunięć projektora
+  </div>
+  <div class="ui-g" style="width:250px;margin-bottom:10px">
+    <div class="ui-g 12">
+      <div class="corner-container">
+        <h4>leftTopCorrection.x</h4>
+        <p-spinner size="10" [(ngModel)]="leftTopCorrection.x" [step]="0.5"
+                   (onChange)="sendLeftTopCorrectionToProperties()"></p-spinner>
+        <h4>leftTopCorrection.y</h4>
+        <p-spinner size="10" [(ngModel)]="leftTopCorrection.y" [step]="0.5"
+                   (onChange)="sendLeftTopCorrectionToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>leftBottomCorrection.x</h4>
+        <p-spinner size="10" [(ngModel)]="leftBottomCorrection.x" [step]="0.5"
+                   (onChange)="sendLeftBottomCorrectionToProperties()"></p-spinner>
+        <h4>leftBottomCorrection.y</h4>
+        <p-spinner size="10" [(ngModel)]="leftBottomCorrection.y" [step]="0.5"
+                   (onChange)="sendLeftBottomCorrectionToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>rightTopCorrection.x</h4>
+        <p-spinner size="10" [(ngModel)]="rightTopCorrection.x" [step]="0.5"
+                   (onChange)="sendRightTopCorrectionToProperties()"></p-spinner>
+        <h4>rightTopCorrection.y</h4>
+        <p-spinner size="10" [(ngModel)]="rightTopCorrection.y" [step]="0.5"
+                   (onChange)="sendRightTopCorrectionToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>rightBottomCorrection.x</h4>
+        <p-spinner size="10" [(ngModel)]="rightBottomCorrection.x" [step]="0.5"
+                   (onChange)="sendRightBottomCorrectionToProperties()"></p-spinner>
+        <h4>rightBottomCorrection.y</h4>
+        <p-spinner size="10" [(ngModel)]="rightBottomCorrection.y" [step]="0.5"
+                   (onChange)="sendRightBottomCorrectionToProperties()"></p-spinner>
+      </div>
+      <div class="corner-container">
+        <h4>centerCorrection.x</h4>
+        <p-spinner size="10" [(ngModel)]="centerCorrection.x" [step]="0.5"
+                   (onChange)="sendCenterCorrectionToProperties()"></p-spinner>
+        <h4>centerCorrection.y</h4>
+        <p-spinner size="10" [(ngModel)]="centerCorrection.y" [step]="0.5"
+                   (onChange)="sendCenterCorrectionToProperties()"></p-spinner>
+      </div>
+    </div>
+  </div>
+</div>
